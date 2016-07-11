@@ -8,15 +8,14 @@ import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware                from 'redux-thunk';
 import createLogger                   from 'redux-logger';
 
-import App            from './components/app';
-import rootReducer    from './reducers';
+import App         from './components/app';
+import rootReducer from './reducers';
 
 import {selectUnitType, fetchUnitsIfNeeded} from './actions';
 
 require("../node_modules/bootstrap/dist/css/bootstrap.min.css");
-
-
 // ----------------------------------------------------------------------------
+
 
 const loggerMiddleware = createLogger();
 
