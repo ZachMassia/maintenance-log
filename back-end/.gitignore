@@ -1,5 +1,5 @@
-# Ignore the default config file
-serverconfig-default.ini
+# Ignore the config file
+serverconfig.ini
 
 # Ignore any database files
 *.db
