@@ -1,16 +1,14 @@
 import 'babel-polyfill';
 
-import React      from 'react';
-import ReactDOM   from 'react-dom';
-import {Provider} from 'react-redux';
-
+import createLogger    from 'redux-logger';
+import thunkMiddleware from 'redux-thunk';
+import React           from 'react';
+import ReactDOM        from 'react-dom';
+import {Provider}      from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware                from 'redux-thunk';
-import createLogger                   from 'redux-logger';
 
-import App         from './components/app';
 import rootReducer from './reducers';
-
+import App         from './components/app';
 import {selectUnitType, fetchUnitsIfNeeded} from './actions';
 
 require("../node_modules/bootstrap/dist/css/bootstrap.min.css");

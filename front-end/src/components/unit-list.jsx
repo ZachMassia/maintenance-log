@@ -1,7 +1,6 @@
-import React     from 'react';
+import DataGrid from 'react-datagrid';
+import React from 'react';
 import {connect} from 'react-redux';
-import DataGrid  from 'react-datagrid';
-
 
 function mapStateToPropsForUnit (unitType) {
 	// Return a mapStateToProps function for a given unit type.

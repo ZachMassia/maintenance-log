@@ -1,4 +1,5 @@
 import {combineReducers} from 'redux';
+
 import {
 	SELECT_UNIT_TYPE, INVALIDATE_UNIT_TYPE,
 	REQUEST_UNITS, RECEIVE_UNITS

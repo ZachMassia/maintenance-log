@@ -1,14 +1,19 @@
-import sys, os, time, warnings
-import openpyxl as xl
-import flask, flask_restless, flask_sqlalchemy
-from sqlalchemy.sql.expression import ClauseElement
-from flask_cors import CORS
+import os
+import sys
+import time
+import warnings
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 
+import flask
+import flask_restless
+import flask_sqlalchemy
+import openpyxl as xl
+from flask_cors import CORS
+from sqlalchemy.sql.expression import ClauseElement
+
 import excel_parser as parser
 from models import Tractor, Trailer, Truck, db
-
 
 # Parse the config file.
 cfg_parser = ConfigParser()
