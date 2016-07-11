@@ -89,6 +89,18 @@ def create_preprocessor(unit_type, workbook, db_session):
 
     return fn
 
+
+def create_api_endpoint(api_manager, unit_type, workbook, db_session):
+    """Register the model with flask-restless."""
+    api_manager.create_api(unit_type,
+                           methods=['GET'],
+                           results_per_page=-1,
+                           preprocessors={
+                               'GET_SINGLE': [create_preprocessor(unit_type, workbook, db_session)],
+                               'GET_MANY':   [create_preprocessor(unit_type, workbook, db_session)]
+                           })
+
+
 def main():
     # Ignore openpyxl warnings.
     warnings.filterwarnings("ignore")
@@ -108,29 +120,8 @@ def main():
     update_all_unit_types(workbook, db.session)
 
     # Create the API endpoints.
-    manager.create_api(Tractor,
-                       methods=['GET'],
-                       results_per_page=-1,
-                       preprocessors={
-                           'GET_SINGLE': [create_preprocessor(Tractor, workbook, db.session)],
-                           'GET_MANY':   [create_preprocessor(Tractor, workbook, db.session)]
-                       })
-
-    manager.create_api(Trailer,
-                       methods=['GET'],
-                       results_per_page=-1,
-                       preprocessors={
-                           'GET_SINGLE': [create_preprocessor(Trailer, workbook, db.session)],
-                           'GET_MANY':   [create_preprocessor(Trailer, workbook, db.session)]
-                       })
-
-    manager.create_api(Truck,
-                       methods=['GET'],
-                       results_per_page=-1,
-                       preprocessors={
-                           'GET_SINGLE': [create_preprocessor(Truck, workbook, db.session)],
-                           'GET_MANY':   [create_preprocessor(Truck, workbook, db.session)]
-                       })
+    for unit in [Tractor, Trailer, Truck]:
+        create_api_endpoint(manager, unit, workbook, db.session)
 
     # Start serving the endpoints.
     app.run()
