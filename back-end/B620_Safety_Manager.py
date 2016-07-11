@@ -2,6 +2,7 @@ import sys, os, time, warnings
 import openpyxl as xl
 import flask, flask_restless, flask_sqlalchemy
 from sqlalchemy.sql.expression import ClauseElement
+from flask_cors import CORS
 from configparser import ConfigParser
 from datetime import datetime, timedelta
 
@@ -23,6 +24,9 @@ app = flask.Flask(__name__)
 app.config['DEBUG'] = cfg_parser.get('settings', 'debug')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///{}'.format(DB_PATH)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Enable CORS
+cors = CORS(app, resources={r'/api/*': {'origins': '*'}})
 
 
 # Store the time a given unit type was last refreshed.
