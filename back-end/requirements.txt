@@ -1,0 +1,5 @@
+openpyxl
+flask
+flask_restless
+flask_sqlalchemy
+sqlalchemy

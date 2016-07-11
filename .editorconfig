@@ -1,0 +1,27 @@
+# Top-most EditorConfig file.
+root = true
+
+# Unix-style newlines with a newline ending every file.
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Set default charset
+[*.{js,jsx,py}]
+charset = utf-8
+
+# Python specific:
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Javascript specific:
+[*.{js,jsx,json}]
+indent_style = tab
+indent_size = 2
+
+# HTML / CSS specific:
+[*.{html,css,sass,scss}]
+indent_style = tab
+indent_size = 4
