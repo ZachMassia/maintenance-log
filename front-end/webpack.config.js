@@ -6,7 +6,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
 	entry: [
 		'babel-polyfill',
-		'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+		'webpack-dev-server/client?http://0.0.0.0:5001', // WebpackDevServer host and port
 		'webpack/hot/only-dev-server',
 		'./src/index.jsx' // Your appʼs entry point
 	],

@@ -25,3 +25,6 @@ indent_size = 2
 [*.{html,css,sass,scss}]
 indent_style = tab
 indent_size = 4
+
+[Vagrantfile]
+indent_size = 2
