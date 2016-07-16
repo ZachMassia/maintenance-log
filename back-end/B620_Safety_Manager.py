@@ -133,7 +133,7 @@ def main():
         create_api_endpoint(manager, unit, workbook, db.session)
 
     # Start serving the endpoints.
-    app.run()
+    app.run(host='0.0.0.0')
 
 
 if __name__ == '__main__':
