@@ -16,6 +16,8 @@ export NVM_DIR="/home/vagrant/.nvm"
 nvm install 6.3.0
 nvm alias default 6.3.0
 
+npm install -g webpack webpack-dev-server
+
 
 # Setup ~/bash_profile for PyEnv.
 printf '\n%s\n%s\n' 'export PATH="$HOME/.pyenv/bin:$PATH"' 'eval "$(pyenv init -)"' >> $HOME/.profile
