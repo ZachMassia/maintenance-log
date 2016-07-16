@@ -18,10 +18,7 @@ nvm alias default 6.3.0
 
 
 # Setup ~/bash_profile for PyEnv.
-cat >"$HOME/.bash_profile" <<EOL
-export path='$HOME/.pyenv/bin:$PATH'
-eval '$(pyenv init -)'
-EOL
+printf '\n%s\n%s\n' 'export PATH="$HOME/.pyenv/bin:$PATH"' 'eval "$(pyenv init -)"' >> $HOME/.profile
 
 # Install PyEnv.
 curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
