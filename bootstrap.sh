@@ -2,7 +2,7 @@
 
 # Install packages.
 sudo apt-get update
-sudo apt-get install -y git sqlite3
+sudo apt-get install -y git libsqlite3-dev libssl-dev
 
 
 # Install NVM.
@@ -17,14 +17,14 @@ nvm install 6.3.0
 nvm alias default 6.3.0
 
 
-# Install PyEnv.
-curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
-
 # Setup ~/bash_profile for PyEnv.
 cat >"$HOME/.bash_profile" <<EOL
-export path="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
+export path='$HOME/.pyenv/bin:$PATH'
+eval '$(pyenv init -)'
 EOL
+
+# Install PyEnv.
+curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash
 
 # Load PyEnv right away.
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -36,4 +36,5 @@ pyenv rehash
 pyenv global 3.5.2
 
 # Install required Python packages. (NodeJS packages to be installed when ssh-ing in.)
+pip install --upgrade pip
 pip install -r /vagrant/back-end/requirements.txt
