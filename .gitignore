@@ -1,2 +1,5 @@
 # Ignore Vagrant VM files
 .vagrant
+
+# Ignore test Excel file
+Maintenance Schedule.xlsm
