@@ -38,7 +38,7 @@ class App extends Component {
 			<div>
 				<Header />
 				<UnitTypePicker value={selectedUnitType}
-												onChange={this.handleChange}
+												onSelect={this.handleChange}
 												options={['Truck', 'Tractor', 'Trailer']} />
 				<ListGroup>
     			{units.map((unit, i) =>
