@@ -43,7 +43,7 @@ function fetchUnits(unitType) {
 		dispatch(requestUnits(unitType));
 
 		// TODO: Error handling.
-		return fetch(`http://192.168.100.100:5000/api/${unitType}`)
+		return fetch(`http://localhost:5000/api/${unitType}`)
 			.then(response => response.json())
 			.then(json => dispatch(receiveUnits(unitType, json)));
 	}
