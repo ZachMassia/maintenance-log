@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react';
 import {ListGroup, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
+import Header from '../components/header';
 import UnitTypePicker from '../components/unit-type-picker';
 import {
 	selectUnitType, fetchUnitsIfNeeded, invalidateUnitType
@@ -35,6 +36,7 @@ class App extends Component {
 
 		return (
 			<div>
+				<Header />
 				<UnitTypePicker value={selectedUnitType}
 												onChange={this.handleChange}
 												options={['Truck', 'Tractor', 'Trailer']} />

@@ -9,7 +9,7 @@ require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
 
 render(
 	<Root />,
-	document.querySelector('#myApp')
+	document.getElementById('root')
 );
 
 
