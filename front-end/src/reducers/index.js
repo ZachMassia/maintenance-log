@@ -17,7 +17,7 @@ function selectedUnitType(state='truck', action) {
 function units(state = {
 	isFetching: false,
 	didInvalidate: false,
-	items: []
+	units: []
 }, action) {
 	switch (action.type) {
 		case INVALIDATE_UNIT_TYPE:

@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 
 import UnitList from '../components/unit-list';
 import {
-	selectedUnitType, fetchUnitsIfNeeded, invalidateUnitType
+	selectUnitType, fetchUnitsIfNeeded, invalidateUnitType
 } from '../actions';
 
 class App extends Component {
@@ -13,7 +13,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		const {dispatch, selectUnitType} = this.props;
+		const {dispatch, selectedUnitType} = this.props;
 		dispatch(fetchUnitsIfNeeded(selectedUnitType));
 	}
 
@@ -24,24 +24,11 @@ class App extends Component {
 		}
 	}
 
-	/*
 	render() {
 		const {selectedUnitType, units, isFetching, lastUpdated} = this.props;
 
-		return (
-			<div>
-				<DataGrid idProperty='id' dataSource={units} columns={[
-					{"name": "unit_num"},
-					{"name": "safety_date"}
-				]} />
-  		</div>
-		)
-	}*/
-
-	render() {
-		return <p>Implement DataGrid view</p>;
+		return <p>Testing</p>
 	}
-
 }
 
 
