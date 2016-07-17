@@ -1,8 +1,9 @@
 import DataGrid from 'react-datagrid';
 import React, {Component, PropTypes} from 'react';
+import {ListGroup, ListGroupItem} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
-import UnitList from '../components/unit-list';
+import UnitTypePicker from '../components/unit-type-picker';
 import {
 	selectUnitType, fetchUnitsIfNeeded, invalidateUnitType
 } from '../actions';
@@ -10,6 +11,7 @@ import {
 class App extends Component {
 	constructor(props) {
 		super(props);
+		this.handleChange = this.handleChange.bind(this);
 	}
 
 	componentDidMount() {
@@ -24,10 +26,25 @@ class App extends Component {
 		}
 	}
 
+	handleChange(newUnitType) {
+		this.props.dispatch(selectUnitType(newUnitType));
+	}
+
 	render() {
 		const {selectedUnitType, units, isFetching, lastUpdated} = this.props;
 
-		return <p>Testing</p>
+		return (
+			<div>
+				<UnitTypePicker value={selectedUnitType}
+												onChange={this.handleChange}
+												options={['Truck', 'Tractor', 'Trailer']} />
+				<ListGroup>
+    			{units.map((unit, i) =>
+						<ListGroupItem key={i}>Unit #{unit.unit_num}</ListGroupItem>
+					)}
+    		</ListGroup>
+  		</div>
+		);
 	}
 }
 
