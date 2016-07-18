@@ -1,9 +1,10 @@
 import DataGrid from 'react-datagrid';
 import React, {Component, PropTypes} from 'react';
-import {ListGroup, ListGroupItem} from 'react-bootstrap';
+import {ListGroup, ListGroupItem, Grid, Col, Row} from 'react-bootstrap';
 import {connect} from 'react-redux';
 
 import Header from '../components/header';
+import UnitGrid from '../components/unit-grid';
 import UnitTypePicker from '../components/unit-type-picker';
 import {
 	selectUnitType, fetchUnitsIfNeeded, invalidateUnitType
@@ -37,14 +38,19 @@ class App extends Component {
 		return (
 			<div>
 				<Header />
-				<UnitTypePicker value={selectedUnitType}
-												onSelect={this.handleChange}
-												options={['Truck', 'Tractor', 'Trailer']} />
-				<ListGroup>
-    			{units.map((unit, i) =>
-						<ListGroupItem key={i}>Unit #{unit.unit_num}</ListGroupItem>
-					)}
-    		</ListGroup>
+				<Grid>
+					<Row>
+						<Col sm={2}>
+							<UnitTypePicker value={selectedUnitType}
+															onSelect={this.handleChange}
+															options={['Truck', 'Tractor', 'Trailer']} />
+						</Col>
+						<Col sm={10}>
+							<UnitGrid units={units} columns={[
+								{column: 'safety_date', title: 'Safety Due Date', isDate: true}]} />
+						</Col>
+					</Row>
+				</Grid>
   		</div>
 		);
 	}
