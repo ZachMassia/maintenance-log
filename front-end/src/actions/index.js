@@ -43,7 +43,8 @@ function fetchUnits(unitType) {
 		dispatch(requestUnits(unitType));
 
 		// TODO: Error handling.
-		return fetch(`http://localhost:5000/api/${unitType}`)
+		// The following fetch call assumes that both the front and back end servers are at the same IP.
+		return fetch(`http://${window.location.hostname}:5000/api/${unitType}`)
 			.then(response => response.json())
 			.then(json => dispatch(receiveUnits(unitType, json)));
 	}
