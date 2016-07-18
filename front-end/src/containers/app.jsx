@@ -40,12 +40,12 @@ class App extends Component {
 				<Header />
 				<Grid>
 					<Row>
-						<Col sm={2}>
+						<Col md={2}>
 							<UnitTypePicker value={selectedUnitType}
 															onSelect={this.handleChange}
 															options={['Truck', 'Tractor', 'Trailer']} />
 						</Col>
-						<Col sm={10}>
+						<Col md={10}>
 							<UnitGrid units={units} columns={[
 								{column: 'safety_date', title: 'Safety Due Date', isDate: true}]} />
 						</Col>

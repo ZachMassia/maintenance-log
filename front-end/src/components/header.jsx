@@ -8,8 +8,8 @@ export default class Header extends Component {
 			<Jumbotron>
 				<Grid>
 					<Row>
-  					<Col sm={4}><Image src="images/macewen_logo.jpg" rounded /></Col>
-						<Col sm={8}><h1>Maintenance Log</h1></Col>
+  					<Col xs={4}><Image src="images/macewen_logo.jpg" responsive /></Col>
+						<Col xs={8}><h1>Maintenance Log</h1></Col>
 					</Row>
 				</Grid>
   		</Jumbotron>
