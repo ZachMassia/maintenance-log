@@ -7,10 +7,10 @@ export default class Header extends Component {
 		return (
 			<Jumbotron>
 				<Grid>
-				<Row>
-  				<Col sm={4}><Image src="images/macewen_logo.jpg" rounded /></Col>
-					<Col sm={8}><h1>Maintenance Log</h1></Col>
-				</Row>
+					<Row>
+  					<Col sm={4}><Image src="images/macewen_logo.jpg" rounded /></Col>
+						<Col sm={8}><h1>Maintenance Log</h1></Col>
+					</Row>
 				</Grid>
   		</Jumbotron>
 		);
