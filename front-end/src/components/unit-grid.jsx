@@ -1,25 +1,40 @@
 import React, {PropTypes} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
-function dataFormatter(isDate) {
-	if (isDate) {
-		return (cell, row) => new Date(cell).toLocaleDateString();
-	} else {
-		return (cell, row) => cell;
-	}
+function dateFormatter(cell, row) {
+	return new Date(cell).toLocaleDateString();
 }
 
+function kmFormatter(cell, row) {
+	return `${cell} KM`;
+}
 
-const UnitGrid = ({units, columns}) => {
+const	bPM      = (formatter) => ({column: "b_pm_date",      title: "B PM", dataFormat: formatter});
+
+const	aPM      = {column: "a_pm_date",      title: "A PM",            dataFormat: dateFormatter};
+const	tPM      = {column: "t_pm_date",      title: "T PM",            dataFormat: dateFormatter};
+const	oneYear  = {column: "one_year_date",  title: "B-620 (VK)",      dataFormat: dateFormatter};
+const	fiveYear = {column: "five_year_date", title: "B-620 (IP / UC)", dataFormat: dateFormatter};
+const	safety   = {column: "safety_pm_date", title: "Safety",          dataFormat: dateFormatter};
+
+
+const columnsByUnitType = {
+	truck:   [aPM, bPM(dateFormatter), oneYear, fiveYear, safety],
+	tractor: [aPM, bPM(kmFormatter), safety],
+	trailer: [tPM, oneYear, fiveYear, safety]
+};
+
+
+const UnitGrid = ({units, selectedUnitType}) => {
 	return (
 		<BootstrapTable data={units}>
-			<TableHeaderColumn dataField="unit_num" isKey={true} dataAlign="center" width="50">
+			<TableHeaderColumn dataField="unit_num" isKey={true} dataAlign="center">
 				Unit #
 			</TableHeaderColumn>
 
-			{columns.map(({column, title, isDate}, i) =>
-				<TableHeaderColumn key={i} dataField={column} dataSort={true} width="175"
-													 dataFormat={dataFormatter(isDate)}>
+			{columnsByUnitType[selectedUnitType].map(({column, title, dataFormat}, i) =>
+				<TableHeaderColumn key={i} dataField={column} dataSort={true}
+													 dataFormat={dataFormat}>
 					{title}
 				</TableHeaderColumn>)
 			}
@@ -29,7 +44,7 @@ const UnitGrid = ({units, columns}) => {
 
 UnitGrid.propTypes = {
 	units: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-	columns: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
+	selectedUnitType: PropTypes.string.isRequired
 };
 
 export default UnitGrid;

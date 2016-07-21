@@ -46,8 +46,7 @@ class App extends Component {
 															options={['Truck', 'Tractor', 'Trailer']} />
 						</Col>
 						<Col md={10}>
-							<UnitGrid units={units} columns={[
-								{column: 'safety_date', title: 'Safety Due Date', isDate: true}]} />
+							<UnitGrid units={units} selectedUnitType={selectedUnitType} />
 						</Col>
 					</Row>
 				</Grid>
