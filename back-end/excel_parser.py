@@ -40,7 +40,7 @@ division_headers = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
 start_row = 3
 
 
-def convert_num_days_to_date(units):
+def convert_num_days_to_date(units, unit_type):
     """Convert the raw day numbers from Excel to python Date objects."""
     converted_units = []
     today = datetime.date.today()
@@ -50,6 +50,8 @@ def convert_num_days_to_date(units):
         for column_name, value in unit.items():
             if column_name == 'unit_num':
                 x['unit_num'] = value
+            elif column_name == 'b_pm_date' and unit_type == Tractor:
+                x['b_pm_date'] = value # Tractor BPM in KM, not a date.
             elif value and value != '#VALUE!':
                 delta = datetime.timedelta(days=value)
                 x[column_name] = today + delta
@@ -60,9 +62,9 @@ def convert_num_days_to_date(units):
     return converted_units
 
 
-def parse(wb, type):
+def parse(wb, unit_type):
     """Given a workbook and a unit type class, will return a list of unit dicts."""
-    sheet = wb[type.SHEET_NAME]
+    sheet = wb[unit_type.SHEET_NAME]
 
     units = []
     for row in sheet.rows[start_row:]:
@@ -72,12 +74,12 @@ def parse(wb, type):
         if row[0].value in division_headers:
             continue
 
-        if not row[type.Columns['unit_num']].value:
+        if not row[unit_type.Columns['unit_num']].value:
             continue
 
-        for field_name, index in type.Columns.items():
+        for field_name, index in unit_type.Columns.items():
             unit[field_name] = row[index].value
 
         units.append(unit)
 
-    return convert_num_days_to_date(units)
+    return convert_num_days_to_date(units, unit_type)

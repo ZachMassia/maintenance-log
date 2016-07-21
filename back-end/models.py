@@ -6,7 +6,7 @@ class Tractor(db.Model):
     id          = db.Column(db.Integer, primary_key=True)
     unit_num    = db.Column(db.Unicode, unique=True)
     a_pm_date   = db.Column(db.Date)
-    b_pm_date   = db.Column(db.Date)
+    b_pm_date   = db.Column(db.Integer)
     safety_date = db.Column(db.Date)
 
 
