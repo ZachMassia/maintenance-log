@@ -6,7 +6,7 @@ function dateFormatter(cell, row) {
 }
 
 function kmFormatter(cell, row) {
-	return `${cell} KM`;
+	return `${cell.toLocaleString()} KM`;
 }
 
 const	bPM      = (formatter) => ({column: "b_pm_date",      title: "B PM", dataFormat: formatter});
@@ -15,7 +15,7 @@ const	aPM      = {column: "a_pm_date",      title: "A PM",            dataFormat
 const	tPM      = {column: "t_pm_date",      title: "T PM",            dataFormat: dateFormatter};
 const	oneYear  = {column: "one_year_date",  title: "B-620 (VK)",      dataFormat: dateFormatter};
 const	fiveYear = {column: "five_year_date", title: "B-620 (IP / UC)", dataFormat: dateFormatter};
-const	safety   = {column: "safety_pm_date", title: "Safety",          dataFormat: dateFormatter};
+const	safety   = {column: "safety_date", 		title: "Safety",          dataFormat: dateFormatter};
 
 
 const columnsByUnitType = {
