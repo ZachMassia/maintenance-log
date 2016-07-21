@@ -9,18 +9,25 @@ function kmFormatter(cell, row) {
 	return `${cell.toLocaleString()} KM`;
 }
 
-const	bPM      = (formatter) => ({column: "b_pm_date",      title: "B PM", dataFormat: formatter});
 
-const	aPM      = {column: "a_pm_date",      title: "A PM",            dataFormat: dateFormatter};
-const	tPM      = {column: "t_pm_date",      title: "T PM",            dataFormat: dateFormatter};
-const	oneYear  = {column: "one_year_date",  title: "B-620 (VK)",      dataFormat: dateFormatter};
+const	aPM = {column: "a_pm_date", title: "A PM", dataFormat: dateFormatter};
+
+const	bPMDate = {column: "b_pm_date", title: "B PM", dataFormat: dateFormatter};
+
+const	bPMDistance = {column: "b_pm_km_until_next", title: "B PM (KM)", dataFormat: kmFormatter};
+
+const	tPM = {column: "t_pm_date", title: "T PM", dataFormat: dateFormatter};
+
+const	oneYear = {column: "one_year_date", title: "B-620 (VK)", dataFormat: dateFormatter};
+
 const	fiveYear = {column: "five_year_date", title: "B-620 (IP / UC)", dataFormat: dateFormatter};
-const	safety   = {column: "safety_date", 		title: "Safety",          dataFormat: dateFormatter};
+
+const	safety = {column: "safety_date", title: "Safety", dataFormat: dateFormatter};
 
 
 const columnsByUnitType = {
-	truck:   [aPM, bPM(dateFormatter), oneYear, fiveYear, safety],
-	tractor: [aPM, bPM(kmFormatter), safety],
+	truck:   [aPM, bPMDate, oneYear, fiveYear, safety],
+	tractor: [aPM, bPMDistance, safety],
 	trailer: [tPM, oneYear, fiveYear, safety]
 };
 

@@ -6,16 +6,16 @@ import openpyxl as xl
 class Tractor:
     SHEET_NAME = 'Tractors'
 
-    Columns = {'unit_num':   0,
-               'a_pm_date':   8,
-               'b_pm_date':   9,
-               'safety_date': 10}
+    Columns = {'unit_num':              0,
+               'a_pm_date':             8,
+               'b_pm_km_until_next':    9,
+               'safety_date':          10}
 
 
 class Trailer:
     SHEET_NAME = 'Trailers'
 
-    Columns = {'unit_num':      0,
+    Columns = {'unit_num':        0,
                't_pm_date':      10,
                'safety_date':    11,
                'one_year_date':  12,
@@ -25,7 +25,7 @@ class Trailer:
 class Truck:
     SHEET_NAME = 'Trucks'
 
-    Columns = {'unit_num':      0,
+    Columns = {'unit_num':        0,
                'a_pm_date':      14,
                'b_pm_date':      15,
                'safety_date':    16,
@@ -40,7 +40,7 @@ division_headers = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
 start_row = 3
 
 
-def convert_num_days_to_date(units, unit_type):
+def convert_num_days_to_date(units):
     """Convert the raw day numbers from Excel to python Date objects."""
     converted_units = []
     today = datetime.date.today()
@@ -49,9 +49,9 @@ def convert_num_days_to_date(units, unit_type):
         x = {}
         for column_name, value in unit.items():
             if column_name == 'unit_num':
-                x['unit_num'] = value
-            elif column_name == 'b_pm_date' and unit_type == Tractor:
-                x['b_pm_date'] = value # Tractor BPM in KM, not a date.
+                x[column_name] = value
+            elif column_name == 'b_pm_km_until_next':
+                x[column_name] = value # Tractor BPM in KM, not a date.
             elif value and value != '#VALUE!':
                 delta = datetime.timedelta(days=value)
                 x[column_name] = today + delta
@@ -82,4 +82,4 @@ def parse(wb, unit_type):
 
         units.append(unit)
 
-    return convert_num_days_to_date(units, unit_type)
+    return convert_num_days_to_date(units)
