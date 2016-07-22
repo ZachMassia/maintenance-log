@@ -2,7 +2,9 @@ import React, {PropTypes} from 'react';
 import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 
 function dateFormatter(cell, row) {
-	return new Date(cell).toLocaleDateString();
+	if (cell !== null) {
+		return new Date(cell).toLocaleDateString();
+	}
 }
 
 function kmFormatter(cell, row) {

@@ -32,10 +32,10 @@ class Truck:
                'one_year_date':  17,
                'five_year_date': 18}
 
-division_headers = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
+ignored_rows = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
                     '10 Lube', '4 Athens', '7 Kempville', '8 Pembroke', 'Picton',
-                    'DEF Div', 'Pick Ups', 'air comp.', 'T42', 'T-40', '1054', '1056',
-                    '1066', '1062', '1067', '1068', '1069', '1074', '43', '1078' ]
+                    'DEF Div', 'Pick Ups', 'air comp.', 'T42', 'T-40', 1054, 1056,
+                    1066, 1062, 1067, 1068, 1069, 1074, 43, 1078 ]
 
 start_row = 3
 
@@ -71,7 +71,7 @@ def parse(wb, unit_type):
         unit = {}
 
         # Ignore any division headers
-        if row[0].value in division_headers:
+        if row[0].value in ignored_rows:
             continue
 
         if not row[unit_type.Columns['unit_num']].value:
