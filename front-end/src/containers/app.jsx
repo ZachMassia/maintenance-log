@@ -1,86 +1,94 @@
-import DataGrid from 'react-datagrid';
-import React, {Component, PropTypes} from 'react';
-import {ListGroup, ListGroupItem, Grid, Col, Row} from 'react-bootstrap';
-import {connect} from 'react-redux';
+import React, { Component, PropTypes } from 'react';
+import { Grid, Col, Row } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 
 import Header from '../components/header';
-import UnitGrid from '../components/unit-grid';
 import UnitTypePicker from '../components/unit-type-picker';
-import {
-	selectUnitType, fetchUnitsIfNeeded, invalidateUnitType
-} from '../actions';
+import { fetchUnitsIfNeeded } from '../actions';
+
+
+const UnitTypes = ['truck', 'tractor', 'trailer'];
+
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		this.handleChange = this.handleChange.bind(this);
-	}
 
-	componentDidMount() {
-		const {dispatch, selectedUnitType} = this.props;
-		dispatch(fetchUnitsIfNeeded(selectedUnitType));
-	}
+  static propTypes = {
+    selectedUnitType: PropTypes.string.isRequired,
+    units: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number,
+    dispatch: PropTypes.func.isRequired,
+    children: PropTypes.node
+  }
 
-	componentWillReceiveProps(nextProps) {
-		if (nextProps.selectedUnitType !== this.props.selectUnitType) {
-			const {dispatch, selectedUnitType} = nextProps;
-			dispatch(fetchUnitsIfNeeded(selectedUnitType));
-		}
-	}
+  constructor(props) {
+    super(props);
+    const { dispatch, selectedUnitType } = this.props;
+    dispatch(fetchUnitsIfNeeded(selectedUnitType));
+  }
 
-	handleChange(newUnitType) {
-		this.props.dispatch(selectUnitType(newUnitType));
-	}
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedUnitType !== this.props.selectedUnitType) {
+      const { dispatch, selectedUnitType } = nextProps;
+      dispatch(fetchUnitsIfNeeded(selectedUnitType));
+    }
+  }
 
-	render() {
-		const {selectedUnitType, units, isFetching, lastUpdated} = this.props;
+  handleChange = eventKey => {
+    // this.props.dispatch(selectUnitType(UnitTypes[eventKey]));
+    const { dispatch } = this.props;
 
-		return (
-			<div>
-				<Header />
-				<Grid>
-					<Row>
-						<Col md={2}>
-							<UnitTypePicker value={selectedUnitType}
-															onSelect={this.handleChange}
-															options={['Truck', 'Tractor', 'Trailer']} />
-						</Col>
-						<Col md={10}>
-							<UnitGrid units={units} selectedUnitType={selectedUnitType} />
-						</Col>
-					</Row>
-				</Grid>
-  		</div>
-		);
-	}
+    dispatch(push(`/units/${UnitTypes[eventKey]}`));
+  }
+
+  render() {
+    const { selectedUnitType } = this.props;
+
+    return (
+      <div>
+        <Header />
+        <Grid>
+          <Row>
+            <Col xs={12}>
+              <UnitTypePicker
+                activeKey={UnitTypes.indexOf(selectedUnitType)}
+                onSelect={this.handleChange}
+                options={UnitTypes}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              {this.props.children}
+            </Col>
+          </Row>
+        </Grid>
+      </div>
+    );
+  }
 }
 
 
-App.propTypes = {
-	selectedUnitType: PropTypes.string.isRequired,
-	units: PropTypes.array.isRequired,
-	isFetching: PropTypes.bool.isRequired,
-	lastUpdated: PropTypes.number,
-	dispatch: PropTypes.func.isRequired
-};
+function mapStateToProps(state, ownProps) {
+  const { unitsByType } = state;
+  const selectedUnitType = ownProps.params.unitType;
+  const {
+    isFetching,
+    lastUpdated,
+    units
+  } = unitsByType[selectedUnitType] || {
+    isFetching: true,
+    units: []
+  };
 
-function mapStateToProps(state) {
-	const {selectedUnitType, unitsByType} = state;
-	const {
-		isFetching,
-		lastUpdated,
-		units
-	} = unitsByType[selectedUnitType] || {
-		isFetching: true,
-		units: []
-	}
-
-	return {
-		selectedUnitType,
-		units,
-		isFetching,
-		lastUpdated
-	}
+  return {
+    selectedUnitType,
+    units,
+    isFetching,
+    lastUpdated
+  };
 }
 
-export default connect(mapStateToProps)(App)
+export default withRouter(connect(mapStateToProps)(App));
