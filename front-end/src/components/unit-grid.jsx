@@ -1,7 +1,14 @@
 import React, { PropTypes, Component } from 'react';
+import { Grid, Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+
+
+import { UNIT_TYPES } from '../constants';
+import UnitTypePicker from '../components/unit-type-picker';
+import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {
   if (cell !== null) {
@@ -36,28 +43,63 @@ const columnsByUnitType = {
 };
 
 
-// const UnitGrid = ({units, selectedUnitType}) => {
 class UnitGrid extends Component {
   static propTypes = {
-    units: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired,
-    selectedUnitType: PropTypes.string.isRequired
+    units: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    lastUpdated: PropTypes.number,
+    selectedUnitType: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
+  }
+
+  constructor(props) {
+    super(props);
+    const { dispatch, selectedUnitType } = this.props;
+    dispatch(fetchUnitsIfNeeded(selectedUnitType));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedUnitType !== this.props.selectedUnitType) {
+      const { dispatch, selectedUnitType } = nextProps;
+      dispatch(fetchUnitsIfNeeded(selectedUnitType));
+    }
+  }
+
+  pickerOnSelect = eventKey => {
+    const { dispatch } = this.props;
+    dispatch(push(`/units/${UNIT_TYPES[eventKey]}`));
   }
 
   render() {
     const { selectedUnitType, units } = this.props;
 
     return (
-      <BootstrapTable data={units}>
-        <TableHeaderColumn dataField="unit_num" isKey dataAlign="center">
-          Unit #
-        </TableHeaderColumn>
+      <Grid>
+        <Row>
+          <Col>
+            <UnitTypePicker
+              activeKey={UNIT_TYPES.indexOf(selectedUnitType)}
+              onSelect={this.pickerOnSelect}
+              options={UNIT_TYPES}
+            />
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <BootstrapTable data={units}>
+              <TableHeaderColumn dataField="unit_num" isKey dataAlign="center">
+                Unit #
+              </TableHeaderColumn>
 
-        {columnsByUnitType[selectedUnitType].map(({ column, title, dataFormat }, i) =>
-          <TableHeaderColumn key={i} dataField={column} dataSort dataFormat={dataFormat}>
-            {title}
-          </TableHeaderColumn>)
-        }
-      </BootstrapTable>
+              {columnsByUnitType[selectedUnitType].map(({ column, title, dataFormat }, i) =>
+                <TableHeaderColumn key={i} dataField={column} dataSort dataFormat={dataFormat}>
+                  {title}
+                </TableHeaderColumn>)
+              }
+            </BootstrapTable>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
@@ -65,10 +107,16 @@ class UnitGrid extends Component {
 
 function mapStateToProps(state, ownProps) {
   const selectedUnitType = ownProps.params.unitType;
+  const { unitsByType } = state;
+
+  const { isFetching, lastUpdated, units } =
+    unitsByType[selectedUnitType] || { isFetching: true, units: [] };
 
   return {
-    selectedUnitType,
-    units: state.unitsByType[selectedUnitType].units || [{}]
+    units,
+    isFetching,
+    lastUpdated,
+    selectedUnitType
   };
 }
 

@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
 import { syncHistoryWithStore } from 'react-router-redux';
 
 import configureStore from './configureStore';
-import Root from './containers/root';
+import routes from './routes';
 
 require('../node_modules/bootstrap/dist/css/bootstrap.min.css');
 
@@ -13,7 +14,9 @@ const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
 
 render(
-  <Root store={store} history={history} />,
+  <Provider store={store}>
+    <Router history={history} routes={routes} />
+  </Provider>,
   document.getElementById('root')
 );
 
