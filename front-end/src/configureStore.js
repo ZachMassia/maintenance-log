@@ -6,7 +6,7 @@ import { routerMiddleware } from 'react-router-redux';
 
 import rootReducer from './reducers';
 
-const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger({ collapsed: true });
 
 export default function configureStore(initialState) {
   const store = createStore(
