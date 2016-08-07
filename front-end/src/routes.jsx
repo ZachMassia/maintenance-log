@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 
-import App from './containers/app';
-import UnitGrid from './components/unit-grid';
+import { App, UnitGrid } from './containers';
+
 
 export default (
   <Route path="/" component={App}>
