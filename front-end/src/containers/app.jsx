@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 
-import { Header } from '../components';
+import Header from '../components/header';
 
 
 class App extends Component {

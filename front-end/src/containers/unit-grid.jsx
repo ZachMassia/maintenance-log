@@ -7,7 +7,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 
 import { UNIT_TYPES } from '../constants';
-import { UnitTypePicker } from '../components';
+import UnitTypePicker from '../components/unit-type-picker';
 import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {

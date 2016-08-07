@@ -1,2 +1,2 @@
 export App from './app';
-export UnitGrid from './unitGrid';
+export UnitGrid from './unit-grid';
