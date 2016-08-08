@@ -15,9 +15,13 @@ from sqlalchemy.sql.expression import ClauseElement
 import excel_parser as parser
 from models import Tractor, Trailer, Truck, db
 
+# Store the root folder of the project.
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
 # Parse the config file.
 cfg_parser = ConfigParser()
-cfg_parser.read('serverconfig.ini')
+cfg_parser.read(os.path.join(__location__, 'serverconfig.ini'))
 
 MAINT_EXCEL_PATH = cfg_parser.get('file_paths', 'maint_excel_path')
 DB_PATH = cfg_parser.get('file_paths', 'db_path')
