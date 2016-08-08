@@ -12,12 +12,20 @@ import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {
   if (cell !== null) {
-    return new Date(cell).toLocaleDateString();
+    return new Date(cell).toLocaleDateString('en-CA', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
   }
 }
 
 function kmFormatter(cell) {
   return `${cell.toLocaleString()} KM`;
+}
+
+function unitNumFormatter(cell) {
+  return <strong>{cell}</strong>;
 }
 
 
@@ -87,7 +95,9 @@ class UnitGrid extends Component {
         <Row>
           <Col>
             <BootstrapTable data={units}>
-              <TableHeaderColumn dataField="unit_num" isKey dataAlign="center">
+              <TableHeaderColumn
+                dataField="unit_num" isKey dataAlign="center" dataFormat={unitNumFormatter}
+              >
                 Unit #
               </TableHeaderColumn>
 
