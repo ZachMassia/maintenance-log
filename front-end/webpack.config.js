@@ -26,7 +26,10 @@ module.exports = {
     noInfo: true, //  --no-info option
     hot: true,
     inline: true,
-    historyApiFallback: true
+    historyApiFallback: {
+      index: '/index.html'
+    },
+    stats: 'errors-only'
   },
   plugins: [
     new webpack.NoErrorsPlugin(),
