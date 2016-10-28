@@ -1,4 +1,5 @@
 import datetime
+import numbers
 
 import openpyxl as xl
 
@@ -52,7 +53,7 @@ def convert_num_days_to_date(units):
                 x[column_name] = value
             elif column_name == 'b_pm_km_until_next':
                 x[column_name] = value # Tractor BPM in KM, not a date.
-            elif value and value != '#VALUE!':
+            elif value and isinstance(value, numbers.Number):
                 delta = datetime.timedelta(days=value)
                 x[column_name] = today + delta
             else:
