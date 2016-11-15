@@ -49,15 +49,32 @@ class Overview extends Component {
         // Save the event display string to avoid multiple lookups.
         const eventStr = eventDisplayStrings[eventType];
 
+
+
         // Push all events for a given unitType -> eventType pair into the events array.
-        this.events.push(...this.props.unitsByType[unitType].units.map(unit => (
-          {
+        this.events.push(...this.props.unitsByType[unitType].units.map(unit => {
+          let eventDate = null;
+
+          if (eventType === 'safety_date') {
+            // A safety is due on the last day of the month it was done.
+            // Grab the year and month from the date, and set it to the last day
+            // of that month.
+            const safetyDate = new Date(unit[eventType]);
+            eventDate = new Date(
+              safetyDate.getFullYear(),
+              safetyDate.getMonth() + 1, // Setting day to 0 goes to previous month.
+              0);
+          } else {
+            eventDate = unit[eventType];
+          }
+
+          return {
             title: `${unit.unit_num} - ${eventStr}`,
             allDay: true,
-            start: unit[eventType],
-            end: unit[eventType],
+            start: eventDate,
+            end: eventDate,
           }
-        )));
+        }));
       }
     }
   }
@@ -69,7 +86,8 @@ class Overview extends Component {
           <BigCalendar
             timeslots={4}
             events={this.events}
-            style={{ minHeight: '430px' }}
+            style={{ minHeight: '550px' }}
+            popup
           />
         </Col>
       </Row>
