@@ -36,7 +36,7 @@ class Truck:
 ignored_rows = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
                     '10 Lube', '4 Athens', '7 Kempville', '8 Pembroke', 'Picton',
                     'DEF Div', 'Pick Ups', 'air comp.', 'T42', 'T-40', 1054, 1056,
-                    1066, 1062, 1067, 1068, 1069, 1074, 43, 1078 ]
+                    1066, 1062, 1067, 1068, 1069, 1074, 43, 1078, 'Timmins' ]
 
 start_row = 3
 
