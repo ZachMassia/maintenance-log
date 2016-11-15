@@ -54,7 +54,7 @@ def convert_num_days_to_date(units):
             elif column_name == 'b_pm_km_until_next':
                 x[column_name] = value # Tractor BPM in KM, not a date.
             elif value and isinstance(value, numbers.Number):
-                delta = datetime.timedelta(days=value)
+                delta = datetime.timedelta(days=value+1)
                 x[column_name] = today + delta
             else:
                 x[column_name] = None

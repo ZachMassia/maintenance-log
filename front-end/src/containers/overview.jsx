@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import { withRouter } from 'react-router';
 
-import { UNIT_TYPES } from '../constants';
+import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
 import { fetchAllUnits } from '../actions';
 
 
@@ -57,13 +57,8 @@ class Overview extends Component {
 
           if (eventType === 'safety_date') {
             // A safety is due on the last day of the month it was done.
-            // Grab the year and month from the date, and set it to the last day
-            // of that month.
-            const safetyDate = new Date(unit[eventType]);
-            eventDate = new Date(
-              safetyDate.getFullYear(),
-              safetyDate.getMonth() + 1, // Setting day to 0 goes to previous month.
-              0);
+            const safetyDate = moment(unit[eventType], DB_DATE_FORMAT);
+            eventDate = moment(safetyDate).endOf("month");
           } else {
             eventDate = unit[eventType];
           }

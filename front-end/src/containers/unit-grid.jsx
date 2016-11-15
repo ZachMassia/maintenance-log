@@ -4,19 +4,16 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import moment from 'moment';
 
 
-import { UNIT_TYPES } from '../constants';
+import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
 import { UnitTypePicker } from '../components';
 import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {
   if (cell !== null) {
-    return new Date(cell).toLocaleDateString('en-CA', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
+    return moment(cell, DB_DATE_FORMAT).format("ll");
   }
 }
 
