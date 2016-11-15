@@ -1,5 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
+import { UNIT_TYPES } from '../constants';
+
 export const INVALIDATE_UNIT_TYPE = 'INVALIDATE_UNIT_TYPE';
 export const REQUEST_UNITS = 'REQUEST_UNITS';
 export const RECEIVE_UNITS = 'RECEIVE_UNITS';
@@ -66,4 +68,10 @@ export function fetchUnitsIfNeeded(unitType) {
     // Let the calling code know there's nothing to wait for.
     return Promise.resolve();
   };
+}
+
+export function fetchAllUnits() {
+  return (dispatch) => Promise.all(
+    UNIT_TYPES.map(unitType => dispatch(fetchUnitsIfNeeded(unitType)))
+  );
 }

@@ -82,7 +82,7 @@ class UnitGrid extends Component {
     const { selectedUnitType, units } = this.props;
 
     return (
-      <Grid>
+      <div>
         <Row>
           <Col>
             <UnitTypePicker
@@ -109,7 +109,7 @@ class UnitGrid extends Component {
             </BootstrapTable>
           </Col>
         </Row>
-      </Grid>
+      </div>
     );
   }
 }
