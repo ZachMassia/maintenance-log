@@ -26,6 +26,7 @@ cfg_parser.read(os.path.join(__location__, 'serverconfig.ini'))
 MAINT_EXCEL_PATH = cfg_parser.get('file_paths', 'maint_excel_path')
 DB_PATH = cfg_parser.get('file_paths', 'db_path')
 CACHE_TIME = timedelta(minutes=cfg_parser.getint('settings', 'cache_time'))
+THREADED = cfg_parser.get('settings', 'threaded')
 
 
 # Create the flask application.
@@ -137,7 +138,7 @@ def main():
         create_api_endpoint(manager, unit, workbook, db.session)
 
     # Start serving the endpoints.
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0', threaded=THREADED)
 
 
 if __name__ == '__main__':
