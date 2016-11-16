@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
@@ -13,7 +13,7 @@ import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {
   if (cell !== null) {
-    return moment(cell, DB_DATE_FORMAT).format("ll");
+    return moment(cell, DB_DATE_FORMAT).format('ll');
   }
 }
 

@@ -49,8 +49,6 @@ class Overview extends Component {
         // Save the event display string to avoid multiple lookups.
         const eventStr = eventDisplayStrings[eventType];
 
-
-
         // Push all events for a given unitType -> eventType pair into the events array.
         this.events.push(...this.props.unitsByType[unitType].units.map(unit => {
           let eventDate = null;
@@ -58,7 +56,7 @@ class Overview extends Component {
           if (eventType === 'safety_date') {
             // A safety is due on the last day of the month it was done.
             const safetyDate = moment(unit[eventType], DB_DATE_FORMAT);
-            eventDate = moment(safetyDate).endOf("month");
+            eventDate = moment(safetyDate).endOf('month');
           } else {
             eventDate = unit[eventType];
           }
@@ -68,7 +66,7 @@ class Overview extends Component {
             allDay: true,
             start: eventDate,
             end: eventDate,
-          }
+          };
         }));
       }
     }
