@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 
 import BigCalendar from 'react-big-calendar';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import moment from 'moment';
 import { withRouter } from 'react-router';
 
@@ -18,7 +19,7 @@ BigCalendar.momentLocalizer(moment);
 class Overview extends Component {
   static propTypes = {
     unitsByType: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -66,6 +67,8 @@ class Overview extends Component {
             allDay: true,
             start: eventDate,
             end: eventDate,
+            unitID: unit.id,
+            unitType
           };
         }));
       }
@@ -81,6 +84,7 @@ class Overview extends Component {
             events={this.events}
             style={{ minHeight: '550px' }}
             popup
+            onSelectEvent={({ unitID, unitType}) => this.props.dispatch(push(`/units/${unitType}/${unitID}`))}
           />
         </Col>
       </Row>
