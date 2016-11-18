@@ -5,6 +5,7 @@ import React, { Component, PropTypes } from 'react';
 
 import BigCalendar from 'react-big-calendar';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import moment from 'moment';
 import { withRouter } from 'react-router';
 
@@ -18,7 +19,7 @@ BigCalendar.momentLocalizer(moment);
 class Overview extends Component {
   static propTypes = {
     unitsByType: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
@@ -49,8 +50,6 @@ class Overview extends Component {
         // Save the event display string to avoid multiple lookups.
         const eventStr = eventDisplayStrings[eventType];
 
-
-
         // Push all events for a given unitType -> eventType pair into the events array.
         this.events.push(...this.props.unitsByType[unitType].units.map(unit => {
           let eventDate = null;
@@ -58,7 +57,7 @@ class Overview extends Component {
           if (eventType === 'safety_date') {
             // A safety is due on the last day of the month it was done.
             const safetyDate = moment(unit[eventType], DB_DATE_FORMAT);
-            eventDate = moment(safetyDate).endOf("month");
+            eventDate = moment(safetyDate).endOf('month');
           } else {
             eventDate = unit[eventType];
           }
@@ -68,7 +67,9 @@ class Overview extends Component {
             allDay: true,
             start: eventDate,
             end: eventDate,
-          }
+            unitID: unit.id,
+            unitType
+          };
         }));
       }
     }
@@ -83,6 +84,7 @@ class Overview extends Component {
             events={this.events}
             style={{ minHeight: '550px' }}
             popup
+            onSelectEvent={({ unitID, unitType}) => this.props.dispatch(push(`/units/${unitType}/${unitID}`))}
           />
         </Col>
       </Row>

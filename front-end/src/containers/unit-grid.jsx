@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
@@ -12,13 +12,15 @@ import { UnitTypePicker } from '../components';
 import { fetchUnitsIfNeeded } from '../actions';
 
 function dateFormatter(cell) {
-  if (cell !== null) {
-    return moment(cell, DB_DATE_FORMAT).format("ll");
+  if (cell) {
+    return moment(cell, DB_DATE_FORMAT).format('ll');
   }
 }
 
 function kmFormatter(cell) {
-  return `${cell.toLocaleString()} KM`;
+  if (cell) {
+    return `${cell.toLocaleString()} KM`;
+  }
 }
 
 function unitNumFormatter(cell) {
@@ -41,7 +43,7 @@ const	fiveYear = { column: 'five_year_date', title: 'B-620 (IP / UC)', dataForma
 const	safety = { column: 'safety_date', title: 'Safety', dataFormat: dateFormatter };
 
 
-const columnsByUnitType = {
+export const columnsByUnitType = {
   truck: [aPM, bPMDate, oneYear, fiveYear, safety],
   tractor: [aPM, bPMDistance, safety],
   trailer: [tPM, oneYear, fiveYear, safety]
