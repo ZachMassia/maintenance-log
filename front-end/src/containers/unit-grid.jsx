@@ -84,15 +84,6 @@ class UnitGrid extends Component {
       <div>
         <Row>
           <Col>
-            <UnitTypePicker
-              activeKey={UNIT_TYPES.indexOf(selectedUnitType)}
-              onSelect={this.pickerOnSelect}
-              options={UNIT_TYPES}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
             <BootstrapTable data={units}>
               <TableHeaderColumn
                 dataField="unit_num" isKey dataAlign="center" dataFormat={unitNumFormatter}
