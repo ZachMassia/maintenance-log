@@ -14,22 +14,21 @@ export default class NavHeader extends Component {
         <Row>
           <Navbar>
             <Navbar.Header>
-              <Navbar.Brand>
-                <LinkContainer to={{pathname: '/'}}>
-                  <Image src={MacEwenLogo} />
-                </LinkContainer>
-
-              </Navbar.Brand>
+              <LinkContainer to={{ pathname: '/' }}>
+                <Navbar.Brand>
+                  <Image src={MacEwenLogo} responsive style={{ margin: 'auto' }} />
+                </Navbar.Brand>
+              </LinkContainer>
               <Navbar.Toggle />
             </Navbar.Header>
             <Navbar.Collapse>
               <Nav>
-                <LinkContainer to={{pathname: '/overview'}}>
+                <LinkContainer to={{ pathname: '/overview' }}>
                   <NavItem eventKey={1}>Overview</NavItem>
                 </LinkContainer>
                 <NavDropdown eventKey={2} title="Unit Lists" id="basic-nav-dropdown">
                   {UNIT_TYPES.map((unit, index) =>
-                    <LinkContainer to={{pathname: `/units/${unit}`}} key={index}>
+                    <LinkContainer to={{ pathname: `/units/${unit}` }} key={index}>
                       <MenuItem eventKey={2 + (index / 10)}>
                         {unit}
                       </MenuItem>

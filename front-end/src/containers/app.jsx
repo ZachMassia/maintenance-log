@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { Grid } from 'react-bootstrap';
 
-import { Header, NavHeader } from '../components';
+import { NavHeader } from '../components';
 
 
 class App extends Component {
@@ -14,8 +14,7 @@ class App extends Component {
 
   render() {
     return (
-      <Grid fluid={true}>
-        <Header />
+      <Grid fluid>
         <NavHeader />
         {this.props.children}
       </Grid>
