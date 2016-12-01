@@ -1,0 +1,31 @@
+.search-input {
+	height: 52px;
+	padding: 10px 10px;
+	position: relative;
+	&::before {
+		content: "\26b2";
+		display: block;
+		font-size: 20px;
+		height: 15px;
+		left: 13px;
+		line-height: 32px;
+		position: absolute;
+		top: 11px;
+		transform: rotate(-45deg);
+		width: 15px;
+		z-index: 3;
+	}
+}
+
+.search-input>input {
+
+	font-size: 18px;
+	height: 32px;
+	line-height: 22px;
+	padding: 5px 10px 5px 25px;
+	position: relative;
+	width: 100%;
+	&:focus {
+		outline: none;
+	}
+}
