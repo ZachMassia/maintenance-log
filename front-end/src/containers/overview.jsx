@@ -25,8 +25,9 @@ class Overview extends Component {
   constructor(props) {
     super(props);
     const { dispatch, unitsByType } = this.props;
-    this.events = [];
-
+    this.state = {
+      events: []
+    };
     dispatch(fetchAllUnits()).then(() => this.createEvents(unitsByType));
   }
 
@@ -45,13 +46,15 @@ class Overview extends Component {
       five_year_date: 'IP UC'
     };
 
+    const events = [];
+
     for (const unitType of UNIT_TYPES) {
       for (const eventType of eventsByUnitType[unitType]) {
         // Save the event display string to avoid multiple lookups.
         const eventStr = eventDisplayStrings[eventType];
 
         // Push all events for a given unitType -> eventType pair into the events array.
-        this.events.push(...this.props.unitsByType[unitType].units.map(unit => {
+        events.push(...this.props.unitsByType[unitType].units.map(unit => {
           let eventDate = null;
 
           if (eventType === 'safety_date') {
@@ -73,6 +76,7 @@ class Overview extends Component {
         }));
       }
     }
+    this.setState({ events });
   }
 
   render() {
@@ -81,10 +85,12 @@ class Overview extends Component {
         <Col>
           <BigCalendar
             timeslots={4}
-            events={this.events}
+            events={this.state.events}
             style={{ minHeight: '550px' }}
             popup
-            onSelectEvent={({ unitID, unitType}) => this.props.dispatch(push(`/units/${unitType}/${unitID}`))}
+            onSelectEvent={
+              ({ unitID, unitType }) => this.props.dispatch(push(`/units/${unitType}/${unitID}`))
+            }
           />
         </Col>
       </Row>
