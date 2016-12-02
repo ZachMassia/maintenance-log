@@ -6,6 +6,10 @@ import { UNIT_TYPES } from '../constants';
 
 import MacEwenLogo from '../static/macewen_logo.jpg';
 
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 
 export default class NavHeader extends Component {
   render() {
@@ -30,7 +34,7 @@ export default class NavHeader extends Component {
                   {UNIT_TYPES.map((unit, index) =>
                     <LinkContainer to={{ pathname: `/units/${unit}` }} key={index}>
                       <MenuItem eventKey={2 + (index / 10)}>
-                        {unit}
+                        {capitalize(unit)}
                       </MenuItem>
                     </LinkContainer>)
                   }
