@@ -12,6 +12,8 @@ class Tractor:
                'b_pm_km_until_next':    9,
                'safety_date':          10}
 
+    start_row = 2
+
 
 class Trailer:
     SHEET_NAME = 'Trailers'
@@ -21,6 +23,8 @@ class Trailer:
                'safety_date':    11,
                'one_year_date':  12,
                'five_year_date': 13}
+
+    start_row = 2
 
 
 class Truck:
@@ -33,12 +37,13 @@ class Truck:
                'one_year_date':  17,
                'five_year_date': 18}
 
+    start_row = 3
+
 ignored_rows = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
                     '10 Lube', '4 Athens', '7 Kempville', '8 Pembroke', 'Picton',
                     'DEF Div', 'Pick Ups', 'air comp.', 'T42', 'T-40', 1054, 1056,
                     1066, 1062, 1067, 1068, 1069, 1074, 43, 1078, 'Timmins' ]
 
-start_row = 3
 
 
 def convert_num_days_to_date(units):
@@ -68,7 +73,7 @@ def parse(wb, unit_type):
     sheet = wb[unit_type.SHEET_NAME]
 
     units = []
-    for row in sheet.rows[start_row:]:
+    for row in sheet.rows[unit_type.start_row:]:
         unit = {}
 
         # Ignore any division headers
