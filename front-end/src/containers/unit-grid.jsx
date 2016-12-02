@@ -6,9 +6,9 @@ import { push } from 'react-router-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import moment from 'moment';
 
-
-import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
+import { DB_DATE_FORMAT } from '../constants';
 import { fetchUnitsIfNeeded } from '../actions';
+
 
 function dateFormatter(cell) {
   if (cell) {
@@ -74,28 +74,23 @@ class UnitGrid extends Component {
     }
   }
 
-  pickerOnSelect = eventKey => {
-    const { dispatch } = this.props;
-    dispatch(push(`/units/${UNIT_TYPES[eventKey]}`));
-  }
-
   render() {
     const { selectedUnitType, units } = this.props;
+
+    const options = {
+      onRowClick: ({ id }) => {
+        this.props.dispatch(push(`/units/${selectedUnitType}/${id}`));
+      }
+    };
 
     return (
       <div>
         <Row>
           <Col>
-            <BootstrapTable data={units}>
+            <BootstrapTable data={units} options={options}>
               <TableHeaderColumn
-                isKey
-                dataField="unit_num"
-                dataAlign="center"
-                dataFormat={unitNumFormatter}
-                filter={{
-                  type: 'TextFilter',
-                  delay: 200
-                }}
+                isKey dataField="unit_num" dataAlign="center" dataFormat={unitNumFormatter}
+                filter={{ type: 'TextFilter', delay: 200 }}
               >
                 Unit #
               </TableHeaderColumn>
