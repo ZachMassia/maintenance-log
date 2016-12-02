@@ -27,19 +27,33 @@ function unitNumFormatter(cell) {
 }
 
 
-const	aPM = { column: 'a_pm_date', title: 'A PM', dataFormat: dateFormatter };
+const	aPM = {
+  column: 'a_pm_date', title: 'A PM Due', dataFormat: dateFormatter
+};
 
-const	bPMDate = { column: 'b_pm_date', title: 'B PM', dataFormat: dateFormatter };
+const	bPMDate = {
+  column: 'b_pm_date', title: 'B PM Due', dataFormat: dateFormatter
+};
 
-const	bPMDistance = { column: 'b_pm_km_until_next', title: 'B PM (KM)', dataFormat: kmFormatter };
+const	bPMDistance = {
+  column: 'b_pm_km_until_next', title: 'B PM (KM Left)', dataFormat: kmFormatter
+};
 
-const	tPM = { column: 't_pm_date', title: 'T PM', dataFormat: dateFormatter };
+const	tPM = {
+  column: 't_pm_date', title: 'T PM Due', dataFormat: dateFormatter
+};
 
-const	oneYear = { column: 'one_year_date', title: 'B-620 (VK)', dataFormat: dateFormatter };
+const	oneYear = {
+  column: 'one_year_date', title: 'One Year B-620 Due', dataFormat: dateFormatter
+};
 
-const	fiveYear = { column: 'five_year_date', title: 'B-620 (IP / UC)', dataFormat: dateFormatter };
+const	fiveYear = {
+  column: 'five_year_date', title: 'Five Year B-620 Due', dataFormat: dateFormatter
+};
 
-const	safety = { column: 'safety_date', title: 'Safety', dataFormat: dateFormatter };
+const	safety = {
+  column: 'safety_date', title: 'Safety Due', dataFormat: dateFormatter
+};
 
 
 export const columnsByUnitType = {
