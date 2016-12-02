@@ -5,7 +5,6 @@ import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import moment from 'moment';
-import SearchInput, { createFilter } from 'react-search-input';
 
 
 import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
@@ -80,26 +79,23 @@ class UnitGrid extends Component {
     dispatch(push(`/units/${UNIT_TYPES[eventKey]}`));
   }
 
-  searchUpdated(term) {
-    this.setState({ searchTerm: term });
-  }
-
   render() {
     const { selectedUnitType, units } = this.props;
-    const filteredUnits = units.filter(createFilter(this.state.searchTerm, 'unit_num'));
 
     return (
       <div>
         <Row>
           <Col>
-            <SearchInput className="search-input" onChange={this.searchUpdated.bind(this)} />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <BootstrapTable data={filteredUnits}>
+            <BootstrapTable data={units}>
               <TableHeaderColumn
-                dataField="unit_num" isKey dataAlign="center" dataFormat={unitNumFormatter}
+                isKey
+                dataField="unit_num"
+                dataAlign="center"
+                dataFormat={unitNumFormatter}
+                filter={{
+                  type: 'TextFilter',
+                  delay: 200
+                }}
               >
                 Unit #
               </TableHeaderColumn>
