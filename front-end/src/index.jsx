@@ -8,7 +8,6 @@ import configureStore from './configureStore';
 import routes from './routes';
 
 import './static/bootswatch.less';
-import './static/search.css';
 
 
 const store = configureStore();
