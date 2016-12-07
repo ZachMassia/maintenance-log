@@ -29,3 +29,18 @@ class Truck(db.Model):
     five_year_date = db.Column(db.Date, nullable=True)
     oil_cal_date   = db.Column(db.Date, nullable=True)
     gas_cal_date   = db.Column(db.Date, nullable=True)
+
+
+class DefaultInterval(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit_type = db.Column(db.Unicode)
+    service_type = db.Column(db.Unicode)
+    interval = db.Column(db.Integer)
+
+
+class IntervalOverride(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    unit_type = db.Column(db.Unicode)
+    service_type = db.Column(db.Unicode)
+    # unit_id = TODO: Find way to reference ID from any table, or create single "Unit table"
+    interval = db.Column(db.Integer)
