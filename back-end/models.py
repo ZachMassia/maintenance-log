@@ -18,9 +18,10 @@ class Unit(db.Model):
 
 class Tractor(Unit):
     id                 = db.Column(db.Integer, db.ForeignKey('unit.id'), primary_key=True)
-    a_pm_date          = db.Column(db.Date, nullable=True)
-    b_pm_km_until_next = db.Column(db.Integer)
-    safety_date        = db.Column(db.Date, nullable=True)
+    a_pm_date          = db.Column(db.Date,    nullable=True)
+    current_km         = db.Column(db.Integer, nullable=True)
+    b_pm_km_until_next = db.Column(db.Integer, nullable=True)
+    safety_date        = db.Column(db.Date,    nullable=True)
 
     defaults = {
         'a_pm':   60,
@@ -54,14 +55,15 @@ class Trailer(Unit):
 
 class Truck(Unit):
     id               = db.Column(db.Integer, db.ForeignKey('unit.id'), primary_key=True)
-    a_pm_date        = db.Column(db.Date, nullable=True)
-    b_pm_date        = db.Column(db.Date, nullable=True)
-    safety_date      = db.Column(db.Date, nullable=True)
-    one_year_date    = db.Column(db.Date, nullable=True)
-    five_year_date   = db.Column(db.Date, nullable=True)
-    oil_cal_date     = db.Column(db.Date, nullable=True)
-    gas_cal_date     = db.Column(db.Date, nullable=True)
-    propane_cal_date = db.Column(db.Date, nullable=True)
+    a_pm_date        = db.Column(db.Date,    nullable=True)
+    b_pm_date        = db.Column(db.Date,    nullable=True)
+    b_pm_last_km     = db.Column(db.Integer, nullable=True)
+    safety_date      = db.Column(db.Date,    nullable=True)
+    one_year_date    = db.Column(db.Date,    nullable=True)
+    five_year_date   = db.Column(db.Date,    nullable=True)
+    oil_cal_date     = db.Column(db.Date,    nullable=True)
+    gas_cal_date     = db.Column(db.Date,    nullable=True)
+    propane_cal_date = db.Column(db.Date,    nullable=True)
     is_propane       = db.Column(db.Boolean, nullable=True)  # TODO: Make required, and set appropriately
 
     defaults = {
@@ -89,7 +91,7 @@ class DefaultInterval(db.Model):
     # Ensure at the DB level that we cannot have multiple defaults for the same service & unit
     # type combo.
     __table_args__ = (
-        db.UniqueConstraint('service_type', 'unit_type', name='service_type_unit_type_default_uc')
+        db.UniqueConstraint('service_type', 'unit_type', name='service_type_unit_type_default_uc'),
     )
 
 
