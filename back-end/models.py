@@ -89,7 +89,6 @@ class DefaultInterval(db.Model):
 
 class IntervalOverride(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    unit_type = db.Column(db.Unicode)
     service_type = db.Column(db.Unicode)
     interval = db.Column(db.Integer)
     unit_id = db.Column(db.Integer, db.ForeignKey('unit.id'))
@@ -97,5 +96,5 @@ class IntervalOverride(db.Model):
     # Ensure at the DB level that we cannot have multiple intervals for the same service type on
     # a given unit.
     __table_args__ = (
-        db.UniqueConstraint('service_type', 'unit_id', name='unit_service_type_uc'),
+        db.UniqueConstraint('service_type', 'unit_id', name='unit_id_service_type_override_uc'),
     )
