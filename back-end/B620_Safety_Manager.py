@@ -15,6 +15,7 @@ from sqlalchemy.sql.expression import ClauseElement
 import excel_parser as parser
 from models import (DefaultInterval, IntervalOverride, Tractor, Trailer, Truck,
                     db)
+from utils import update_or_create_unit
 
 # Store the root folder of the project.
 __location__ = os.path.realpath(
@@ -28,6 +29,7 @@ MAINT_EXCEL_PATH = cfg_parser.get('file_paths', 'maint_excel_path')
 DB_PATH = cfg_parser.get('file_paths', 'db_path')
 CACHE_TIME = timedelta(minutes=cfg_parser.getint('settings', 'cache_time'))
 THREADED = cfg_parser.get('settings', 'threaded')
+VERBOSE = cfg_parser.get('settings', 'verbose')
 
 
 # Create the flask application.
@@ -48,21 +50,6 @@ last_data_refresh = {
 }
 
 
-def update_or_create(session, model, **kwargs):
-    """Update the model instance if found, otherwise create a new one."""
-    # Try to find a model with the given unit #.
-    instance = session.query(model).filter_by(unit_num=kwargs['unit_num']).first()
-    if instance:
-        for k, v in kwargs.items():
-            setattr(instance, k, v)
-        return instance
-    else:
-        instance = model(**kwargs)
-        session.add(instance)
-        print('New unit added: {}'.format(kwargs['unit_num']))
-        return instance
-
-
 def parse_unit_and_update_db(unit_type, workbook, db_session):
     """Parses the Excel file for given unit type and update the DB."""
     # TODO: The following is a bit hackish. Could use some refactoring.
@@ -76,7 +63,7 @@ def parse_unit_and_update_db(unit_type, workbook, db_session):
 
     # For each parsed unit, either update the record in the DB, or create a new one.
     for unit in results:
-        update_or_create(db_session, unit_type, **unit)
+        update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
     db_session.commit()
 
     # Update last refresh time.
