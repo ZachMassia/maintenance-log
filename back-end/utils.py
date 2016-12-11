@@ -8,7 +8,7 @@ def update_or_create_unit(session, model, verbose=False, **kwargs):
             if verbose:
                 old_val = getattr(instance, k)
                 if old_val != v:
-                    print('Updated {} for unit {}: {} --> {}'.format(k, unit_num, old_val, v))
+                    print('Updated {} for unit {}:\t{}\t-->\t{}'.format(k, unit_num, old_val, v))
             setattr(instance, k, v)
         return instance
     else:
