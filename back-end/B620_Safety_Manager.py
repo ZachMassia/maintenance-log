@@ -62,14 +62,15 @@ def parse_unit_and_update_db(unit_type, workbook, db_session):
     results = parser.parse(workbook, parser_unit_class_obj)
 
     # For each parsed unit, either update the record in the DB, or create a new one.
-    for unit in results:
+    for unit in results['units']:
         update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
     db_session.commit()
 
     # Update last refresh time.
     last_data_refresh[unit_type.__name__] = datetime.now()
 
-    print('Parsed and updated {} {} records.'.format(len(results), unit_type.__name__))
+    if VERBOSE:
+        print('Parsed and updated {} {} records.'.format(len(results['units']), unit_type.__name__))
 
 
 def update_all_unit_types(workbook, db_session):
