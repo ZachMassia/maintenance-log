@@ -13,7 +13,8 @@ from flask_cors import CORS
 from sqlalchemy.sql.expression import ClauseElement
 
 import excel_parser as parser
-from models import Tractor, Trailer, Truck, db
+from models import (DefaultInterval, IntervalOverride, Tractor, Trailer, Truck,
+                    db)
 
 # Store the root folder of the project.
 __location__ = os.path.realpath(
@@ -74,10 +75,9 @@ def parse_unit_and_update_db(unit_type, workbook, db_session):
     results = parser.parse(workbook, parser_unit_class_obj)
 
     # For each parsed unit, either update the record in the DB, or create a new one.
-    with app.app_context():
-        for unit in results:
-            update_or_create(db_session, unit_type, **unit)
-        db_session.commit()
+    for unit in results:
+        update_or_create(db_session, unit_type, **unit)
+    db_session.commit()
 
     # Update last refresh time.
     last_data_refresh[unit_type.__name__] = datetime.now()
@@ -92,6 +92,25 @@ def update_all_unit_types(workbook, db_session):
     """
     for unit in [Tractor, Trailer, Truck]:
         parse_unit_and_update_db(unit, workbook, db_session)
+
+
+def populate_default_intervals(db_session):
+    """Populate the default intervals table if it is empty.
+
+    Any further changes to these values should be done from the web configuration.
+    """
+    for unit in [Tractor, Trailer, Truck]:
+        for service_type, interval in unit.defaults.items():
+            row = DefaultInterval(
+                unit_type    = unit.__tablename__,
+                service_type = service_type,
+                interval     = interval
+            )
+            db_session.add(row)
+
+    db_session.commit()
+
+    print('Default intervals table populated.')
 
 
 def create_preprocessor(unit_type, workbook, db_session):
@@ -130,15 +149,28 @@ def main():
         db.init_app(app)
         db.create_all()
 
-    # Update the database.
-    update_all_unit_types(workbook, db.session)
+        # Populate the default intervals if this is a fresh DB.
+        if DefaultInterval.query.count() <= 0:
+            populate_default_intervals(db.session)
 
-    # Create the API endpoints.
-    for unit in [Tractor, Trailer, Truck]:
-        create_api_endpoint(manager, unit, workbook, db.session)
+        # Update the database.
+        update_all_unit_types(workbook, db.session)
 
-    # Start serving the endpoints.
-    app.run(host='0.0.0.0', threaded=THREADED)
+
+        # Create the API endpoints.
+        for unit in [Tractor, Trailer, Truck]:
+            create_api_endpoint(manager, unit, workbook, db.session)
+
+        manager.create_api(DefaultInterval,
+                           methods=['GET', 'PATCH'],
+                           results_per_page=-1)
+
+        manager.create_api(IntervalOverride,
+                           methods=['GET', 'PATCH', 'POST', 'DELETE'],
+                           results_per_page=-1)
+
+        # Start serving the endpoints.
+        app.run(host='0.0.0.0', threaded=THREADED)
 
 
 if __name__ == '__main__':
