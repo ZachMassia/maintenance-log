@@ -14,7 +14,8 @@
   },
   "plugins": [
     "import",
-    "react"
+    "react",
+    "redux-saga"
   ],
   "settings": {
     "import/resolver": "webpack"
