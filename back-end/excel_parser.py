@@ -1,5 +1,6 @@
 import datetime
 import numbers
+from itertools import islice
 
 import openpyxl as xl
 
@@ -73,7 +74,7 @@ def parse(wb, unit_type):
     sheet = wb[unit_type.SHEET_NAME]
 
     units = []
-    for row in sheet.rows[unit_type.start_row:]:
+    for row in islice(sheet.rows, unit_type.start_row, None):
         unit = {}
 
         # Ignore any division headers
