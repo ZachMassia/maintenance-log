@@ -1,8 +1,7 @@
-from itertools import islice
 from datetime import datetime
+from itertools import islice
 
 import openpyxl as xl
-
 
 SHEET_NAME = 'Sheet1'
 START_ROW = 2

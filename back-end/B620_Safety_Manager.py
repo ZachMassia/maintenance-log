@@ -12,8 +12,8 @@ import openpyxl as xl
 from flask_cors import CORS
 from sqlalchemy.sql.expression import ClauseElement
 
-import excel_parser as parser
 import calibrations_parser as cal_parser
+import excel_parser as parser
 from models import (DefaultInterval, IntervalOverride, Tractor, Trailer, Truck,
                     db)
 from utils import update_or_create_unit
