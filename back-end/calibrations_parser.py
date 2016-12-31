@@ -23,17 +23,17 @@ def filter_invalid_data(units):
 
     for unit in units:
         x = {}
+        num = str(unit['unit_num'])
         for column_name, value in unit.items():
             if column_name == 'unit_num':
-                # Convert the unit num to a string.
-                x[column_name] = str(value)
+                pass # Leave out the unit num as the data is in a dict with unit_num keys.
             elif type(value) is datetime:
                 # Convert the datetime object to a date object.
                 x[column_name] = value.date()
             else:
                 x[column_name] = None
 
-        filtered_units[x['unit_num']] = x
+        filtered_units[num] = x
     return filtered_units
 
 

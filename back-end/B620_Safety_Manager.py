@@ -66,14 +66,13 @@ def parse_unit_and_update_db(unit_type, workbook, cal_workbook, db_session):
 
     # For each parsed unit, either update the record in the DB, or create a new one.
     for unit in results['units']:
-        unit_instance = update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
-        unit_num = unit['unit_num']
-        if unit_num in cal_results:
-            for k, v in cal_results[unit_num].items():
-                old_val = getattr(unit_instance, k)
-                if old_val != v:
-                    print('Updated {} for unit {}:\t{}\t-->\t{}'.format(k, unit_num, old_val, v))
-            setattr(unit_instance, k, v) # TODO: This doesn't seem to be saved to the DB.
+        num = unit['unit_num']
+        if num in cal_results:
+            # Pass in the calibration data as well as the maintenance data.
+            update_or_create_unit(db_session, unit_type, VERBOSE, **unit, **cal_results[num])
+        else:
+            update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
+
     db_session.commit()
 
     # Update last refresh time.
