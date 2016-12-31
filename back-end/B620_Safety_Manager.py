@@ -13,6 +13,7 @@ from flask_cors import CORS
 from sqlalchemy.sql.expression import ClauseElement
 
 import excel_parser as parser
+import calibrations_parser as cal_parser
 from models import (DefaultInterval, IntervalOverride, Tractor, Trailer, Truck,
                     db)
 from utils import update_or_create_unit
@@ -26,6 +27,7 @@ cfg_parser = ConfigParser()
 cfg_parser.read(os.path.join(__location__, 'serverconfig.ini'))
 
 MAINT_EXCEL_PATH = cfg_parser.get('file_paths', 'maint_excel_path')
+CAL_EXCEL_PATH = cfg_parser.get('file_paths', 'cal_excel_path')
 DB_PATH = cfg_parser.get('file_paths', 'db_path')
 CACHE_TIME = timedelta(minutes=cfg_parser.getint('settings', 'cache_time'))
 THREADED = cfg_parser.get('settings', 'threaded')
@@ -50,7 +52,7 @@ last_data_refresh = {
 }
 
 
-def parse_unit_and_update_db(unit_type, workbook, db_session):
+def parse_unit_and_update_db(unit_type, workbook, cal_workbook, db_session):
     """Parses the Excel file for given unit type and update the DB."""
     # TODO: The following is a bit hackish. Could use some refactoring.
     #       Because we have both an SQLAlchemy model class and an Excel parser info class,
@@ -60,10 +62,18 @@ def parse_unit_and_update_db(unit_type, workbook, db_session):
 
     # Parse the Excel file.
     results = parser.parse(workbook, parser_unit_class_obj)
+    cal_results = cal_parser.parse(cal_workbook)
 
     # For each parsed unit, either update the record in the DB, or create a new one.
     for unit in results['units']:
-        update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
+        unit_instance = update_or_create_unit(db_session, unit_type, VERBOSE, **unit)
+        unit_num = unit['unit_num']
+        if unit_num in cal_results:
+            for k, v in cal_results[unit_num].items():
+                old_val = getattr(unit_instance, k)
+                if old_val != v:
+                    print('Updated {} for unit {}:\t{}\t-->\t{}'.format(k, unit_num, old_val, v))
+            setattr(unit_instance, k, v) # TODO: This doesn't seem to be saved to the DB.
     db_session.commit()
 
     # Update last refresh time.
@@ -73,13 +83,13 @@ def parse_unit_and_update_db(unit_type, workbook, db_session):
         print('Parsed and updated {} {} records.'.format(len(results['units']), unit_type.__name__))
 
 
-def update_all_unit_types(workbook, db_session):
+def update_all_unit_types(workbook, cal_workbook, db_session):
     """Parses and updates all unit types.
 
     Mainly to bulk update on server startup or client requested refresh.
     """
     for unit in [Tractor, Trailer, Truck]:
-        parse_unit_and_update_db(unit, workbook, db_session)
+        parse_unit_and_update_db(unit, workbook, cal_workbook, db_session)
 
 
 def populate_default_intervals(db_session):
@@ -128,6 +138,7 @@ def main():
 
     # Load the Excel file.
     workbook = xl.load_workbook(MAINT_EXCEL_PATH, data_only=True)
+    cal_workbook = xl.load_workbook(CAL_EXCEL_PATH, data_only=True)
 
     # Create the Flask-Restless API manager.
     manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
@@ -142,7 +153,7 @@ def main():
             populate_default_intervals(db.session)
 
         # Update the database.
-        update_all_unit_types(workbook, db.session)
+        update_all_unit_types(workbook, cal_workbook, db.session)
 
 
         # Create the API endpoints.

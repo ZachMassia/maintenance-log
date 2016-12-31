@@ -1,6 +1,6 @@
-
 import numbers
 from datetime import datetime
+from itertools import islice
 
 import openpyxl as xl
 
@@ -115,7 +115,8 @@ def parse(wb, unit_type):
 
     units = []
     intervals = []
-    for row in sheet.rows[unit_type.start_row:]:
+
+    for row in islice(sheet.rows, unit_type.start_row, None):
         unit = {}
         interval = {}
 
