@@ -110,24 +110,24 @@ def populate_default_intervals(db_session):
     print('Default intervals table populated.')
 
 
-def create_preprocessor(unit_type, workbook, db_session):
+def create_preprocessor(unit_type, workbook, cal_workbook, db_session):
     """Creates and returns a flask-restless preprocessor function."""
     def fn(**kwargs):
         # Only update the DB if the cache is expired.
         if datetime.now() - last_data_refresh[unit_type.__name__] > CACHE_TIME:
-            parse_unit_and_update_db(unit_type, workbook, db_session)
+            parse_unit_and_update_db(unit_type, workbook, cal_workbook, db_session)
 
     return fn
 
 
-def create_api_endpoint(api_manager, unit_type, workbook, db_session):
+def create_api_endpoint(api_manager, unit_type, workbook, cal_workbook, db_session):
     """Register the model with flask-restless."""
     api_manager.create_api(unit_type,
                            methods=['GET'],
                            results_per_page=-1,
                            preprocessors={
-                               'GET_SINGLE': [create_preprocessor(unit_type, workbook, db_session)],
-                               'GET_MANY':   [create_preprocessor(unit_type, workbook, db_session)]
+                               'GET_SINGLE': [create_preprocessor(unit_type, workbook, cal_workbook, db_session)],
+                               'GET_MANY':   [create_preprocessor(unit_type, workbook, cal_workbook, db_session)]
                            })
 
 
@@ -157,7 +157,7 @@ def main():
 
         # Create the API endpoints.
         for unit in [Tractor, Trailer, Truck]:
-            create_api_endpoint(manager, unit, workbook, db.session)
+            create_api_endpoint(manager, unit, workbook, cal_workbook, db.session)
 
         manager.create_api(DefaultInterval,
                            methods=['GET', 'PATCH'],
