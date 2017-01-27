@@ -30,8 +30,6 @@ function createEvents(unitsByType, defaultIntervals) {
       // Push all events for a given unitType -> eventType pair into the events array.
       if (unitsByType[unitType].units.length > 0) {
         events.push(...unitsByType[unitType].units.map(unit => {
-          let eventDate = moment(unit[eventType], DB_DATE_FORMAT);
-
           // Grab the default interval.
           // TODO: Allow interval overrides.
           const interval = defaultIntervals({
@@ -39,11 +37,12 @@ function createEvents(unitsByType, defaultIntervals) {
             service_type: eventType.replace('_date', '')
           }).first().interval;
 
+          let eventDate = moment(unit[eventType], DB_DATE_FORMAT);
+          eventDate.add(interval, 'days');
+
           if (eventType === 'safety_date') {
             // A safety is due on the last day of the month it was done.
-            eventDate = eventDate.add(interval, 'days').endOf('month');
-          } else {
-            eventDate = eventDate.add(interval, 'days');
+            eventDate = eventDate.endOf('month');
           }
 
           return {
