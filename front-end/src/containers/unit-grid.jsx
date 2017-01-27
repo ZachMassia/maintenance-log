@@ -7,7 +7,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import moment from 'moment';
 
 import { DB_DATE_FORMAT } from '../constants';
-import { fetchUnitsIfNeeded } from '../actions';
+import { requestUnits } from '../actions';
 
 
 function dateFormatter(cell) {
@@ -28,11 +28,11 @@ function unitNumFormatter(cell) {
 
 
 const	aPM = {
-  column: 'a_pm_date', title: 'A PM Due', dataFormat: dateFormatter
+  column: 'a_pm_date', title: 'A PM', dataFormat: dateFormatter
 };
 
 const	bPMDate = {
-  column: 'b_pm_date', title: 'B PM Due', dataFormat: dateFormatter
+  column: 'b_pm_date', title: 'B PM', dataFormat: dateFormatter
 };
 
 const	bPMDistance = {
@@ -40,19 +40,19 @@ const	bPMDistance = {
 };
 
 const	tPM = {
-  column: 't_pm_date', title: 'T PM Due', dataFormat: dateFormatter
+  column: 't_pm_date', title: 'T PM', dataFormat: dateFormatter
 };
 
 const	oneYear = {
-  column: 'one_year_date', title: 'One Year B-620 Due', dataFormat: dateFormatter
+  column: 'one_year_date', title: 'One Year B-620', dataFormat: dateFormatter
 };
 
 const	fiveYear = {
-  column: 'five_year_date', title: 'Five Year B-620 Due', dataFormat: dateFormatter
+  column: 'five_year_date', title: 'Five Year B-620', dataFormat: dateFormatter
 };
 
 const	safety = {
-  column: 'safety_date', title: 'Safety Due', dataFormat: dateFormatter
+  column: 'safety_date', title: 'Safety', dataFormat: dateFormatter
 };
 
 
@@ -75,7 +75,7 @@ class UnitGrid extends Component {
   constructor(props) {
     super(props);
     const { dispatch, selectedUnitType } = this.props;
-    dispatch(fetchUnitsIfNeeded(selectedUnitType));
+    dispatch(requestUnits(selectedUnitType));
     this.state = {
       searchTerm: ''
     };
@@ -84,7 +84,7 @@ class UnitGrid extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedUnitType !== this.props.selectedUnitType) {
       const { dispatch, selectedUnitType } = nextProps;
-      dispatch(fetchUnitsIfNeeded(selectedUnitType));
+      dispatch(requestUnits(selectedUnitType));
     }
   }
 

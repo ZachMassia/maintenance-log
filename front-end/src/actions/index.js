@@ -1,77 +1,61 @@
-import fetch from 'isomorphic-fetch';
+import keyMirror from 'key-mirror';
 
-import { UNIT_TYPES } from '../constants';
-
-export const INVALIDATE_UNIT_TYPE = 'INVALIDATE_UNIT_TYPE';
-export const REQUEST_UNITS = 'REQUEST_UNITS';
-export const RECEIVE_UNITS = 'RECEIVE_UNITS';
+export const MESSAGES = keyMirror({
+  INVALIDATE_UNIT_TYPE: null,
+  REQUEST_UNITS: null,
+  REQUEST_ALL_UNITS: null,
+  RECEIVE_UNITS: null,
+  INVALIDATE_DEFAULT_INTERVALS: null,
+  REQUEST_DEFAULT_INTERVALS: null,
+  RECEIVE_DEFAULT_INTERVALS: null
+});
 
 
 export function invalidateUnitType(unitType) {
   return {
-    type: INVALIDATE_UNIT_TYPE,
+    type: MESSAGES.INVALIDATE_UNIT_TYPE,
     unitType
   };
 }
 
-function requestUnits(unitType) {
+export function requestUnits(unitType) {
   return {
-    type: REQUEST_UNITS,
+    type: MESSAGES.REQUEST_UNITS,
     unitType
   };
 }
 
-function receiveUnits(unitType, json) {
+export function requestAllUnits() {
   return {
-    type: RECEIVE_UNITS,
+    type: MESSAGES.REQUEST_ALL_UNITS
+  };
+}
+
+export function receiveUnits(unitType, json) {
+  return {
+    type: MESSAGES.RECEIVE_UNITS,
     unitType,
     units: json.objects,
     receivedAt: Date.now()
   };
 }
 
-function fetchUnits(unitType) {
-  return (dispatch) => {
-    // First dispatch: The app state is updated to inform
-    //                 that the API call is starting.
-    dispatch(requestUnits(unitType));
-
-    // TODO: Error handling.
-    // The following fetch call assumes that both the front and back end servers are at the same IP.
-    return fetch(`http://${window.location.hostname}:5000/api/${unitType}`)
-      .then(response => response.json())
-      .then(json => dispatch(receiveUnits(unitType, json)));
+export function invalidateDefaultIntervals() {
+  return {
+    type: MESSAGES.INVALIDATE_DEFAULT_INTERVALS
   };
 }
 
-function shouldFetchUnits(state, unitType) {
-  const units = state.unitsByType[unitType];
-  if (!units) {
-    return true;
-  } else if (units.isFetching) {
-    return false;
-  }
-  return units.didInvalidate;
-}
-
-export function fetchUnitsIfNeeded(unitType) {
-  // Note that the function also receives getState()
-  // which lets you choose what to dispatch next.
-  //
-  // This is useful for avoiding a network request if
-  // a cached value is already available.
-
-  return (dispatch, getState) => {
-    if (shouldFetchUnits(getState(), unitType)) {
-      return dispatch(fetchUnits(unitType));
-    }
-    // Let the calling code know there's nothing to wait for.
-    return Promise.resolve();
+export function requestDefaultIntervals() {
+  return {
+    type: MESSAGES.REQUEST_DEFAULT_INTERVALS
   };
 }
 
-export function fetchAllUnits() {
-  return (dispatch) => Promise.all(
-    UNIT_TYPES.map(unitType => dispatch(fetchUnitsIfNeeded(unitType)))
-  );
+export function receiveDefaultIntervals(json) {
+  return {
+    type: MESSAGES.RECEIVE_DEFAULT_INTERVALS,
+    intervals: json.objects,
+    receivedAt: Date.now()
+  };
 }

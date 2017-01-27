@@ -9,8 +9,8 @@ import { push } from 'react-router-redux';
 import moment from 'moment';
 import { withRouter } from 'react-router';
 
-import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
-import { fetchAllUnits } from '../actions';
+import { requestAllUnits, requestDefaultIntervals } from '../actions';
+import { getEvents } from '../selectors';
 
 
 BigCalendar.momentLocalizer(moment);
@@ -18,65 +18,15 @@ BigCalendar.momentLocalizer(moment);
 
 class Overview extends Component {
   static propTypes = {
-    unitsByType: PropTypes.object.isRequired,
+    events: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired
   }
 
   constructor(props) {
     super(props);
-    const { dispatch, unitsByType } = this.props;
-    this.state = {
-      events: []
-    };
-    dispatch(fetchAllUnits()).then(() => this.createEvents(unitsByType));
-  }
-
-  createEvents() {
-    // Which events to grab from each unit type.
-    const eventsByUnitType = {
-      tractor: ['safety_date'],
-      trailer: ['safety_date', 'one_year_date', 'five_year_date'],
-      truck: ['safety_date', 'one_year_date', 'five_year_date']
-    };
-
-    // How to display the event type in the calendar itself.
-    const eventDisplayStrings = {
-      safety_date: 'Safety',
-      one_year_date: 'VK',
-      five_year_date: 'IP UC'
-    };
-
-    const events = [];
-
-    for (const unitType of UNIT_TYPES) {
-      for (const eventType of eventsByUnitType[unitType]) {
-        // Save the event display string to avoid multiple lookups.
-        const eventStr = eventDisplayStrings[eventType];
-
-        // Push all events for a given unitType -> eventType pair into the events array.
-        events.push(...this.props.unitsByType[unitType].units.map(unit => {
-          let eventDate = null;
-
-          if (eventType === 'safety_date') {
-            // A safety is due on the last day of the month it was done.
-            const safetyDate = moment(unit[eventType], DB_DATE_FORMAT);
-            eventDate = moment(safetyDate).endOf('month');
-          } else {
-            eventDate = unit[eventType];
-          }
-
-          return {
-            title: `${unit.unit_num} - ${eventStr}`,
-            allDay: true,
-            start: eventDate,
-            end: eventDate,
-            unitID: unit.id,
-            unitType
-          };
-        }));
-      }
-    }
-    this.setState({ events });
+    const { dispatch } = this.props;
+    dispatch(requestDefaultIntervals());
+    dispatch(requestAllUnits());
   }
 
   render() {
@@ -85,7 +35,7 @@ class Overview extends Component {
         <Col>
           <BigCalendar
             timeslots={4}
-            events={this.state.events}
+            events={this.props.events}
             style={{ minHeight: '550px' }}
             popup
             onSelectEvent={
@@ -99,10 +49,8 @@ class Overview extends Component {
 }
 
 function mapStateToProps(state) {
-  const { unitsByType } = state;
-
   return {
-    unitsByType,
+    events: getEvents(state) || []
   };
 }
 
