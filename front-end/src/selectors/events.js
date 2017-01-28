@@ -22,14 +22,14 @@ function createEvents(unitsByType, defaultIntervals) {
 
   const events = [];
 
-  for (const unitType of UNIT_TYPES) {
-    for (const eventType of eventsByUnitType[unitType]) {
+  UNIT_TYPES.forEach((unitType) => {
+    eventsByUnitType[unitType].forEach((eventType) => {
       // Save the event display string to avoid multiple lookups.
       const eventStr = eventDisplayStrings[eventType];
 
       // Push all events for a given unitType -> eventType pair into the events array.
       if (unitsByType[unitType].units.length > 0) {
-        events.push(...unitsByType[unitType].units.map(unit => {
+        events.push(...unitsByType[unitType].units.map((unit) => {
           // Grab the default interval.
           // TODO: Allow interval overrides.
           const interval = defaultIntervals({
@@ -55,8 +55,8 @@ function createEvents(unitsByType, defaultIntervals) {
           };
         }));
       }
-    }
-  }
+    });
+  });
   return events;
 }
 
