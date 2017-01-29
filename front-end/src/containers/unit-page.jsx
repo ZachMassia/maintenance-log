@@ -88,7 +88,6 @@ function mapStateToProps(state, ownProps) {
   if (units.length) {
     const unitsDB = taffy(units);
     unit = unitsDB({ id: unitID }).first();
-    // unit = units[unitID - 1];
   }
 
   return {
