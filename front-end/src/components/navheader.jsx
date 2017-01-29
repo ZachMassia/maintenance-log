@@ -32,7 +32,7 @@ export default class NavHeader extends Component {
                 </LinkContainer>
                 <NavDropdown eventKey={2} title="Unit Lists" id="basic-nav-dropdown">
                   {UNIT_TYPES.map((unit, index) =>
-                    <LinkContainer to={{ pathname: `/units/${unit}` }} key={index}>
+                    <LinkContainer to={{ pathname: `/units/${unit}` }} key={unit}>
                       <MenuItem eventKey={2 + (index / 10)}>
                         {capitalize(unit)}
                       </MenuItem>

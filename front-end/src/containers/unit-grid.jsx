@@ -27,31 +27,31 @@ function unitNumFormatter(cell) {
 }
 
 
-const	aPM = {
+const aPM = {
   column: 'a_pm_date', title: 'A PM', dataFormat: dateFormatter
 };
 
-const	bPMDate = {
+const bPMDate = {
   column: 'b_pm_date', title: 'B PM', dataFormat: dateFormatter
 };
 
-const	bPMDistance = {
+const bPMDistance = {
   column: 'b_pm_km_until_next', title: 'B PM (KM Left)', dataFormat: kmFormatter
 };
 
-const	tPM = {
+const tPM = {
   column: 't_pm_date', title: 'T PM', dataFormat: dateFormatter
 };
 
-const	oneYear = {
+const oneYear = {
   column: 'one_year_date', title: 'One Year B-620', dataFormat: dateFormatter
 };
 
-const	fiveYear = {
+const fiveYear = {
   column: 'five_year_date', title: 'Five Year B-620', dataFormat: dateFormatter
 };
 
-const	safety = {
+const safety = {
   column: 'safety_date', title: 'Safety', dataFormat: dateFormatter
 };
 
@@ -66,8 +66,8 @@ export const columnsByUnitType = {
 class UnitGrid extends Component {
   static propTypes = {
     units: PropTypes.array.isRequired,
-    isFetching: PropTypes.bool.isRequired,
-    lastUpdated: PropTypes.number,
+    isFetching: PropTypes.bool.isRequired,  // eslint-disable-line react/no-unused-prop-types
+    lastUpdated: PropTypes.number,  // eslint-disable-line react/no-unused-prop-types
     selectedUnitType: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
   }
@@ -109,8 +109,8 @@ class UnitGrid extends Component {
                 Unit #
               </TableHeaderColumn>
 
-              {columnsByUnitType[selectedUnitType].map(({ column, title, dataFormat }, i) =>
-                <TableHeaderColumn key={i} dataField={column} dataSort dataFormat={dataFormat}>
+              {columnsByUnitType[selectedUnitType].map(({ column, title, dataFormat }) =>
+                <TableHeaderColumn key={title} dataField={column} dataSort dataFormat={dataFormat}>
                   {title}
                 </TableHeaderColumn>)
               }

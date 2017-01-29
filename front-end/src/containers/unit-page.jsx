@@ -14,8 +14,16 @@ class UnitPage extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     unitType: PropTypes.string.isRequired,
-    unitID: PropTypes.number.isRequired,
+    unitID: PropTypes.number.isRequired,  // eslint-disable-line react/no-unused-prop-types
     unit: PropTypes.object.isRequired
+  }
+
+  static renderDaysUntilDue(column, data) {
+    if (column === 'b_pm_km_until_next') {
+      return <td>N/A</td>;
+    }
+    const date = moment(data, DB_DATE_FORMAT);
+    return <td>{date.fromNow()}</td>;
   }
 
   constructor(props) {
@@ -32,14 +40,6 @@ class UnitPage extends Component {
       const { dispatch, unitType } = nextProps;
       dispatch(fetchUnitsIfNeeded(unitType));
     }
-  }
-
-  renderDaysUntilDue(column, data) {
-    if (column === 'b_pm_km_until_next') {
-      return <td>N/A</td>;
-    }
-    const date = moment(data, DB_DATE_FORMAT);
-    return <td>{date.fromNow()}</td>;
   }
 
   render() {
@@ -60,8 +60,8 @@ class UnitPage extends Component {
               </tr>
             </thead>
             <tbody>
-              {columnsByUnitType[unitType].map(({ column, title, dataFormat }, index) =>
-                <tr key={index}>
+              {columnsByUnitType[unitType].map(({ column, title, dataFormat }) =>
+                <tr key={title}>
                   <td>{title}</td>
                   <td>{dataFormat(unit[column])}</td>
                   {this.renderDaysUntilDue(column, unit[column])}
