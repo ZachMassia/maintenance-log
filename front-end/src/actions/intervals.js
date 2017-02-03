@@ -1,4 +1,6 @@
 import keyMirror from 'key-mirror';
+import moment from 'moment';
+
 
 export const INTERVAL_MESSAGES = keyMirror({
   INVALIDATE_DEFAULT_INTERVALS: null,
@@ -23,6 +25,6 @@ export function receiveDefaultIntervals(json) {
   return {
     type: INTERVAL_MESSAGES.RECEIVE_DEFAULT_INTERVALS,
     intervals: json.objects,
-    receivedAt: Date.now()
+    receivedAt: moment()
   };
 }

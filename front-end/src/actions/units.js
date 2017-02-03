@@ -1,4 +1,6 @@
 import keyMirror from 'key-mirror';
+import moment from 'moment';
+
 
 export const UNIT_MESSAGES = keyMirror({
   INVALIDATE_UNIT_TYPE: null,
@@ -33,6 +35,6 @@ export function receiveUnits(unitType, json) {
     type: UNIT_MESSAGES.RECEIVE_UNITS,
     unitType,
     units: json.objects,
-    receivedAt: Date.now()
+    receivedAt: moment()
   };
 }

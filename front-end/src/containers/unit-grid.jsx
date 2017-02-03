@@ -67,7 +67,7 @@ class UnitGrid extends Component {
   static propTypes = {
     units: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,  // eslint-disable-line react/no-unused-prop-types
-    lastUpdated: PropTypes.number,  // eslint-disable-line react/no-unused-prop-types
+    lastUpdated: PropTypes.object,  // eslint-disable-line react/no-unused-prop-types
     selectedUnitType: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
   }

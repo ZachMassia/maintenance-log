@@ -3,20 +3,38 @@
 import fetch from 'isomorphic-fetch';
 import restful, { fetchBackend } from 'restful.js';
 import { take, select, put, call, fork } from 'redux-saga/effects';
+import moment from 'moment';
 
 import * as actions from '../actions';
 import { UNIT_TYPES } from '../constants';
 
 
 const api = restful(`http://${window.location.hostname}:5000/api`, fetchBackend(fetch));
+const CACHE_TIME = 5; // minutes
 
 const unitsSelector = state => state.unitsByType;
+const defaultIntervalsSelecter = state => state.defaultIntervals;
 
-function shouldFetchUnits(units) {
+function shouldFetchUnits({ units, lastUpdated, didInvalidate }) {
+  const now = moment();
+
   if (!units.length) {
     return true;
+  } else if (lastUpdated && moment.duration(now.diff(lastUpdated)).asMinutes() > CACHE_TIME) {
+    return true;
   }
-  return units.didInvalidate;
+  return didInvalidate;
+}
+
+function shouldFetchDefaultIntervals({ intervals, lastUpdated, didInvalidate }) {
+  const now = moment();
+
+  if (!intervals.length) {
+    return true;
+  } else if (lastUpdated && moment.duration(now.diff(lastUpdated)).asMinutes() > CACHE_TIME) {
+    return true;
+  }
+  return didInvalidate;
 }
 
 // ---- API ---- //
@@ -51,8 +69,12 @@ function* fetchAllUnits() {
 }
 
 function* fetchDefaultIntervals() {
-  const intervals = yield call(fetchDefaultIntervalsApi, placeholderErrorHandler);
-  yield put(actions.receiveDefaultIntervals(intervals));
+  const defaultIntervalsInStore = yield select(defaultIntervalsSelecter);
+
+  if (shouldFetchDefaultIntervals(defaultIntervalsInStore)) {
+    const intervals = yield call(fetchDefaultIntervalsApi, placeholderErrorHandler);
+    yield put(actions.receiveDefaultIntervals(intervals));
+  }
 }
 
 

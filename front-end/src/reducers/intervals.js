@@ -4,7 +4,8 @@ import { MESSAGES } from '../actions';
 export default function defaultIntervals(state = {
   isFetching: false,
   didInvalidate: false,
-  intervals: {}
+  intervals: {},
+  lastUpdated: null
 }, action) {
   switch (action.type) {
     case MESSAGES.INVALIDATE_DEFAULT_INTERVALS:

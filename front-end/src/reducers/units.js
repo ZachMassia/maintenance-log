@@ -4,7 +4,8 @@ import { MESSAGES } from '../actions';
 function units(state = {
   isFetching: false,
   didInvalidate: false,
-  units: []
+  units: [],
+  lastUpdated: null
 }, action) {
   switch (action.type) {
     case MESSAGES.INVALIDATE_UNIT_TYPE:
