@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
 
-import { App, UnitGrid, Overview, UnitPage } from './containers';
+import { App, UnitGrid, Overview, UnitPage, Vis } from './containers';
 
 
 export default (
@@ -10,5 +10,6 @@ export default (
     <Route path="units/:unitType" component={UnitGrid} />
     <Route path="units/:unitType/:unitID" component={UnitPage} />
     <Route path="overview" component={Overview} />
+    <Route path="chart" component={Vis} />
   </Route>
 );

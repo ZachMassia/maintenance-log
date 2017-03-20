@@ -30,10 +30,13 @@ export default class NavHeader extends Component {
                 <LinkContainer to={{ pathname: '/overview' }}>
                   <NavItem eventKey={1}>Overview</NavItem>
                 </LinkContainer>
-                <NavDropdown eventKey={2} title="Unit Lists" id="basic-nav-dropdown">
+                <LinkContainer to={{ pathname: '/chart' }}>
+                  <NavItem eventKey={2}>Charts</NavItem>
+                </LinkContainer>
+                <NavDropdown eventKey={3} title="Unit Lists" id="basic-nav-dropdown">
                   {UNIT_TYPES.map((unit, index) =>
                     <LinkContainer to={{ pathname: `/units/${unit}` }} key={unit}>
-                      <MenuItem eventKey={2 + (index / 10)}>
+                      <MenuItem eventKey={3 + (index / 10)}>
                         {capitalize(unit)}
                       </MenuItem>
                     </LinkContainer>)

@@ -51,7 +51,8 @@ function createEvents(unitsByType, defaultIntervals) {
             start: eventDate,
             end: eventDate,
             unitID: unit.id,
-            unitType
+            unitType,
+            eventType
           };
         }));
       }
