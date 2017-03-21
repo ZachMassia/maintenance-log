@@ -15,7 +15,7 @@ export default class MonthChart extends Component {
         <Tooltip />
         <Legend />
         <Bar dataKey="VK" stackId="a" fill="#236A62" />
-        <Bar dataKey="IP UC" stackId="a" fill="#3F3075" />
+        <Bar dataKey="IP UC" fill="#3F3075" />
         <Bar dataKey="Safety" stackId="a" fill="#80A035" />
       </BarChart>
     );

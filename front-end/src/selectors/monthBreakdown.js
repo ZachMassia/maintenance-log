@@ -41,7 +41,14 @@ function createBreakdown(events) {
       data({ month: event.start.format('MMM') })
         .update(function () {
           // Make sure this is an event for the current year.
-          if (event.start.year() !== moment().year()) return this;
+          // Events already gone by will roll over to the next year.
+          const eventDate = event.start;
+          const currentDate = moment();
+
+          if (eventDate.year() !== currentDate.year() &&
+              eventDate.month() >= currentDate.month()) {
+            return this;
+          }
 
           this[key] += 1;
           this.events.push(event);
