@@ -26,11 +26,11 @@ class Vis extends Component {
     const { monthBreakdown } = this.props;
 
     const lists = monthBreakdown.map(monthData =>
-      <Col lg={3}>
+      <Col lg={3} key={`col-${monthData.month}`}>
         <h3>{monthData.month} <Badge>{monthData.events.length}</Badge></h3>
         <ListGroup>
           {monthData.events.map(event =>
-            <ListGroupItem>{event.title}</ListGroupItem>
+            <ListGroupItem key={`${event.unitID}-${event.eventType}`}>{event.title}</ListGroupItem>
           )}
         </ListGroup>
       </Col>
