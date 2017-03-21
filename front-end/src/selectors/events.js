@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
-import taffy from 'taffy';
-
+import { taffy } from 'taffydb';
 import { UNIT_TYPES, DB_DATE_FORMAT } from '../constants';
 
 

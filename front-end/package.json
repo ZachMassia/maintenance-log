@@ -55,7 +55,7 @@
     "redux-saga": "~0.14.3",
     "reselect": "~2.5.4",
     "restful.js": "~0.9.6",
-    "taffy": "~2.6.2"
+    "taffydb": "^2.7.3"
   },
   "devDependencies": {
     "babel-core": "~6.22.1",

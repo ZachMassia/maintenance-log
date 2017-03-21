@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
-import taffy from 'taffy';
+import { taffy } from 'taffydb';
 
 import getEvents from './events';
 

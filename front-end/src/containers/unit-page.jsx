@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import taffy from 'taffy';
+import { taffy } from 'taffydb';
 
 import { DB_DATE_FORMAT } from '../constants';
 import { requestUnits } from '../actions';
