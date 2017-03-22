@@ -1,0 +1,23 @@
+# Planned Features
+    * [TODO] Page for editing default intervals
+    * [TODO] Front-end logic for interval overrides
+    * [TODO] Allow click-through to detailed unit page from any reference to unit
+    * [TODO] Spinner / loading animations
+    * [TODO] Back-end Excel parsing of calibrations data.
+    * Front-end calibration features:
+        * [TODO] Detailed unit page
+        * [TODO] Overview calendar
+        * [TODO] Grid views
+        * [TODO] Page showing calibration vs B620 dates, sortable by range between both dates
+    * Updating service dates:
+        * [TODO] Generic update page / pop-up
+        * [TODO] Interface for initiating update from detailed unit page
+        * [TODO] Persist changes back to Excel files until fully migrated to SQlite datastore
+    * Back-end database:
+        * [TODO] Schema versioning
+        * [TODO] Regular backups of database file
+    * Production ready
+        * [TODO] Setup docker
+        * [TODO] Prod-config for Flask
+        * [TODO] Prod-config for Babel/Webpack
+        * [TODO] Proper WYSIG server to replace Flask and Webpack dev servers
