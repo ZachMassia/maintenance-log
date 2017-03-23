@@ -39,7 +39,7 @@ function createBreakdown(events) {
     eventsDB(query).each((event) => {
       const key = eventBarNames[event.eventType];
       data({ month: event.start.format('MMM') })
-        .update(function () {
+        .update(function () { // eslint-disable-line func-names
           // Make sure this is an event for the current year.
           // Events already gone by will roll over to the next year.
           const eventDate = event.start;
