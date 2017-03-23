@@ -42,6 +42,9 @@ export default class NavHeader extends Component {
                     </LinkContainer>)
                   }
                 </NavDropdown>
+                <LinkContainer to={{ pathname: '/calibrations' }}>
+                  <NavItem eventKey={4}>Calibrations</NavItem>
+                </LinkContainer>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

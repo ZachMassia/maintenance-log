@@ -9,7 +9,10 @@ function createEvents(unitsByType, defaultIntervals) {
   const eventsByUnitType = {
     tractor: ['safety_date'],
     trailer: ['safety_date', 'one_year_date', 'five_year_date'],
-    truck: ['safety_date', 'one_year_date', 'five_year_date']
+    truck: [
+      'safety_date', 'one_year_date', 'five_year_date',
+      'oil_cal_date', 'gas_cal_date', 'propane_date'
+    ]
   };
 
   // How to display the event type in the calendar itself.
