@@ -1,7 +1,7 @@
 # Planned Features
     * [TODO] Page for editing default intervals
     * [TODO] Front-end logic for interval overrides
-    * [TODO] Allow click-through to detailed unit page from any reference to unit
+    * [DONE] Allow click-through to detailed unit page from any reference to unit
     * [TODO] Spinner / loading animations
     * [TODO] Back-end Excel parsing of calibrations data.
     * Front-end calibration features:
