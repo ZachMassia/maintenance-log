@@ -94,7 +94,8 @@ def filter_invalid_data(units):
                 # Convert the unit num to a string.
                 # Tractor and Truck unit numbers come through as ints, but they are stored as
                 # Unicode in the db.
-                x[column_name] = str(value)
+                # Remove any extras such as '- Propane' from the end of the string.
+                x[column_name] = str(value).split(' - ')[0]
             elif type(value) is not datetime:
                 # At this point, if it's not a datetime object, it's most likely a cell in one of
                 # the date columns which is blank, or has "N/A", so pass it through as None.
