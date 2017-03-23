@@ -3,11 +3,11 @@
     * [TODO] Front-end logic for interval overrides
     * [DONE] Allow click-through to detailed unit page from any reference to unit
     * [TODO] Spinner / loading animations
-    * [TODO] Back-end Excel parsing of calibrations data.
+    * [DONE] Back-end Excel parsing of calibrations data.
     * Front-end calibration features:
-        * [TODO] Detailed unit page
+        * [DONE] Detailed unit page
         * [TODO] Overview calendar
-        * [TODO] Grid views
+        * [DONE] Grid views
         * [TODO] Page showing calibration vs B620 dates, sortable by range between both dates
     * Updating service dates:
         * [TODO] Generic update page / pop-up

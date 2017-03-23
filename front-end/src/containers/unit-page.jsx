@@ -19,11 +19,15 @@ class UnitPage extends Component {
     unit: PropTypes.object.isRequired
   }
 
-  static renderDaysSinceDone(column, data) {
+  static renderTimeSinceDone(column, data) {
     if (column === 'b_pm_km_until_next') {
       return <td>N/A</td>;
     }
     const date = moment(data, DB_DATE_FORMAT);
+
+    if (!date.isValid()) {
+      return <td>N/A</td>;
+    }
     return <td>{date.fromNow()}</td>;
   }
 
@@ -57,7 +61,7 @@ class UnitPage extends Component {
               <tr>
                 <th>Event</th>
                 <th>Last Done</th>
-                <th># Days Since Done</th>
+                <th>Time Since Done</th>
               </tr>
             </thead>
             <tbody>
@@ -65,7 +69,7 @@ class UnitPage extends Component {
                 <tr key={title}>
                   <td>{title}</td>
                   <td>{dataFormat(unit[column])}</td>
-                  {UnitPage.renderDaysSinceDone(column, unit[column])}
+                  {UnitPage.renderTimeSinceDone(column, unit[column])}
                 </tr>
               )}
             </tbody>

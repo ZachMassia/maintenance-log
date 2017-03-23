@@ -10,6 +10,10 @@ import { DB_DATE_FORMAT } from '../constants';
 import { requestUnits } from '../actions';
 
 
+String.prototype.capitalizeFirstLetter = function() { // eslint-disable-line
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
+
 function dateFormatter(cell) {
   if (cell) {
     return moment(cell, DB_DATE_FORMAT).format('ll');
@@ -55,9 +59,18 @@ const safety = {
   column: 'safety_date', title: 'Safety', dataFormat: dateFormatter
 };
 
+const calFormat = calType => ({
+  column: `${calType}_cal_date`,
+  title: `${calType.capitalizeFirstLetter()} Calibration`,
+  dataFormat: dateFormatter
+});
+
 
 export const columnsByUnitType = {
-  truck: [aPM, bPMDate, oneYear, fiveYear, safety],
+  truck: [
+    aPM, bPMDate, oneYear, fiveYear, safety,
+    calFormat('oil'), calFormat('gas'), calFormat('propane')
+  ],
   tractor: [aPM, bPMDistance, safety],
   trailer: [tPM, oneYear, fiveYear, safety]
 };
