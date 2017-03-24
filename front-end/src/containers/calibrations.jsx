@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Col, Row, Table } from 'react-bootstrap';
+import { Grid, Col, Row, Table, Button, ButtonGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Moment from 'moment';
@@ -42,72 +42,102 @@ class Calibrations extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     trucks: PropTypes.func.isRequired,
-    isFetching: PropTypes.bool.isRequired,  // eslint-disable-line react/no-unused-prop-types
+    defaultIntervals: PropTypes.func.isRequired,
+    isFetchingTrucks: PropTypes.bool.isRequired,  // eslint-disable-line
+    isFetchingDefIntervals: PropTypes.bool.isRequired // eslint-disable-line
   }
 
   constructor(props) {
     super(props);
     const { dispatch } = this.props;
 
-    dispatch(requestUnits('truck'));
     dispatch(requestDefaultIntervals());
+    dispatch(requestUnits('truck'));
+
+    this.state = {
+      range: 3
+    };
   }
 
-  render() {
-    const { trucks } = this.props;
-    const sortedByCal = trucks().map(getFirstCalDue).sort((a, b) => {
-      const today = moment();
-      const aRange = moment.range(a.date, today);
-      const bRange = moment.range(b.date, today);
+  createMonthSelectBtn = n => (
+    <Button
+      key={`mBtn${n}`}
+      active={this.state.range === n}
+      onClick={() => this.setState({ range: n })}
+    >
+      {n} Months
+    </Button>
+  )
 
-      if (aRange > bRange) return -1;
-      if (aRange < bRange) return 1;
-      return 0;
-    });
+  render() {
+    const { trucks, defaultIntervals } = this.props;
+    const sortedByCal = trucks().map(getFirstCalDue)
+      .sort((a, b) => {
+        const today = moment();
+        const aRange = moment.range(a.date, today);
+        const bRange = moment.range(b.date, today);
+
+        if (aRange > bRange) return -1;
+        if (aRange < bRange) return 1;
+        return 0;
+      });
+      //.filter(t => t.date.isBefore(moment().add(6, 'months')));
 
     return (
-      <Col>
-        <Row><h2>Upcoming calibrations</h2></Row>
+      <Grid>
         <Row>
-          <Table striped bordered condensed>
-            <thead>
-              <tr>
-                <th>Unit</th>
-                <th>Date</th>
-                <th>Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedByCal.map(t =>
-                <tr key={t.id}>
-                  <td>{t.unit_num}</td>
-                  <td>
-                    {
-                      t.date && t.date.isValid() ? (
-                        t.date.format('ll')
-                      ) : (
-                        ''
-                      )
-                    }
-                  </td>
-                  <td>{t.type}</td>
-                </tr>)}
-            </tbody>
-          </Table>
+          <Col md={8}><h2>Upcoming calibrations</h2></Col>
+          <Col md={4}>
+            <ButtonGroup>
+              {[3, 6, 12].map(this.createMonthSelectBtn)}
+            </ButtonGroup>
+          </Col>
         </Row>
-      </Col>
+        <Row>
+          <Col>
+            <Table striped bordered condensed>
+              <thead>
+                <tr>
+                  <th>Unit</th>
+                  <th>Date</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sortedByCal.map(t =>
+                  <tr key={t.id}>
+                    <td>{t.unit_num}</td>
+                    <td>
+                      {
+                        t.date && t.date.isValid() ? (
+                          t.date.format('ll')
+                        ) : (
+                          ''
+                        )
+                      }
+                    </td>
+                    <td>{t.type}</td>
+                  </tr>)}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+      </Grid>
     );
   }
 }
 
 function mapStateToProps(state) {
-  const { unitsByType } = state;
+  const { unitsByType, defaultIntervals } = state;
 
-  const { isFetching, units } = unitsByType.truck || { isFetching: true, units: [] };
+  const trucks = unitsByType.truck || { isFetching: true, units: [] };
+  const intervals = defaultIntervals || { isFetching: true, intervals: [] };
 
   return {
-    trucks: taffy(units),
-    isFetching
+    trucks: taffy(trucks.units),
+    isFetchingTrucks: trucks.isFetching,
+    defaultIntervals: taffy(intervals),
+    isFetchingDefIntervals: intervals.isFetching
   };
 }
 
