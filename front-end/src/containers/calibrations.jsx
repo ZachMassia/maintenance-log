@@ -13,30 +13,15 @@ import { DB_DATE_FORMAT } from '../constants';
 const moment = extendMoment(Moment);
 
 
-function getFirstCalDue({ id, unit_num, propane_cal_date, oil_cal_date, gas_cal_date }) {
-  const propane = moment(propane_cal_date, DB_DATE_FORMAT);
-  const oil = moment(oil_cal_date, DB_DATE_FORMAT);
-  const gas = moment(gas_cal_date, DB_DATE_FORMAT);
+function dateCompNearestFirst(a, b) {
+  const today = moment();
+  const aRange = moment.range(a.date, today);
+  const bRange = moment.range(b.date, today);
 
-  if (propane.isValid()) {
-    return { id, unit_num, type: 'Propane', date: propane };
-  }
-
-  if (oil.isBefore(gas, 'days')) {
-    return { id, unit_num, type: 'Oil/Gas', date: oil };
-  }
-
-  if (gas.isBefore(oil, 'days')) {
-    return { id, unit_num, type: 'Oil/Gas', date: gas };
-  }
-
-  if (gas.isSame(oil, 'days')) {
-    return { id, unit_num, type: 'Oil/Gas', date: gas };
-  }
-
-  return { id, unit_num, type: 'N/A', date: null };
+  if (aRange > bRange) return -1;
+  if (aRange < bRange) return 1;
+  return 0;
 }
-
 
 class Calibrations extends Component {
   static propTypes = {
@@ -59,6 +44,50 @@ class Calibrations extends Component {
     };
   }
 
+  getFirstCalDue = (unit) => {
+    const { id, unit_num, propane_cal_date, oil_cal_date, gas_cal_date } = unit;
+    const { defaultIntervals } = this.props;
+
+    // Convert the last done dates to momentjs objects.
+    // TODO: Convert all dates to momentjs as soon as they're received in the reducer.
+    //       This will do for now, but is quite verbose for nothing.
+    const propane = moment(propane_cal_date, DB_DATE_FORMAT);
+    const oil = moment(oil_cal_date, DB_DATE_FORMAT);
+    const gas = moment(gas_cal_date, DB_DATE_FORMAT);
+
+    if (propane.isValid()) {
+      const propane_int = defaultIntervals({ service_type: 'propane_cal' }).first().interval;
+      return { id, unit_num, type: 'Propane', date: propane.add(propane_int, 'days') };
+    }
+
+    const oil_int = defaultIntervals({ service_type: 'oil_cal' }).first().interval;
+    const gas_int = defaultIntervals({ service_type: 'gas_cal' }).first().interval;
+
+    if (oil.isBefore(gas, 'days')) {
+      return { id, unit_num, type: 'Oil/Gas', date: oil.add(oil_int, 'days') };
+    }
+
+    if (gas.isBefore(oil, 'days')) {
+      return { id, unit_num, type: 'Oil/Gas', date: gas.add(gas_int, 'days') };
+    }
+
+    if (gas.isSame(oil, 'days')) {
+      return { id, unit_num, type: 'Oil/Gas', date: gas.add(gas_int, 'days') };
+    }
+
+    return { id, unit_num, type: 'N/A', date: null };
+  }
+
+  dateInRangePred = ({ date }) => {
+    if (date && date.isValid()) {
+      return date.isBefore(moment().add(this.state.range, 'months'));
+    }
+
+    // TODO: Create dedicated table for units missing a calibration date.
+    //       For now keep them listed here.
+    return true;
+  }
+
   createMonthSelectBtn = n => (
     <Button
       key={`mBtn${n}`}
@@ -70,18 +99,11 @@ class Calibrations extends Component {
   )
 
   render() {
-    const { trucks, defaultIntervals } = this.props;
-    const sortedByCal = trucks().map(getFirstCalDue)
-      .sort((a, b) => {
-        const today = moment();
-        const aRange = moment.range(a.date, today);
-        const bRange = moment.range(b.date, today);
-
-        if (aRange > bRange) return -1;
-        if (aRange < bRange) return 1;
-        return 0;
-      });
-      //.filter(t => t.date.isBefore(moment().add(6, 'months')));
+    const { trucks } = this.props;
+    const sortedByCal = trucks()
+      .map(this.getFirstCalDue)
+      .filter(this.dateInRangePred)
+      .sort(dateCompNearestFirst);
 
     return (
       <Grid>
@@ -136,7 +158,7 @@ function mapStateToProps(state) {
   return {
     trucks: taffy(trucks.units),
     isFetchingTrucks: trucks.isFetching,
-    defaultIntervals: taffy(intervals),
+    defaultIntervals: taffy(intervals.intervals),
     isFetchingDefIntervals: intervals.isFetching
   };
 }
