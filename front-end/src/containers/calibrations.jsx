@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Grid, Col, Row, Table, Button, ButtonGroup, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -95,6 +96,8 @@ class Calibrations extends Component {
     </Button>
   )
 
+  createClickHandler = id => () => this.props.dispatch(push(`/units/truck/${id}`));
+
   render() {
     const { trucks } = this.props;
 
@@ -119,7 +122,7 @@ class Calibrations extends Component {
         </Row>
         <Row>
           <Col>
-            <Table striped bordered condensed>
+            <Table striped bordered condensed hover>
               <thead>
                 <tr>
                   <th>Unit</th>
@@ -129,7 +132,7 @@ class Calibrations extends Component {
               </thead>
               <tbody>
                 {sortedByCal.map(t =>
-                  <tr key={t.id}>
+                  <tr key={t.id} onClick={this.createClickHandler(t.id)}>
                     <td>{t.unit_num}</td>
                     <td>
                       {
@@ -152,7 +155,10 @@ class Calibrations extends Component {
         <Row>
           <Col>
             <ListGroup>
-              {trucksMissingCal.map(t => <ListGroupItem key={t.id}>{t.unit_num}</ListGroupItem>)}
+              {trucksMissingCal.map(t =>
+                <ListGroupItem key={t.id} onClick={this.createClickHandler(t.id)}>
+                  {t.unit_num}
+                </ListGroupItem>)}
             </ListGroup>
           </Col>
         </Row>
