@@ -79,6 +79,18 @@ class Calibrations extends Component {
     return { id, unit_num, type: 'N/A', date: null };
   }
 
+  getB620Due = (unitID) => {
+    const { trucks, defaultIntervals } = this.props;
+    const unit = trucks({ id: unitID }).first();
+
+    const oneYearInt = defaultIntervals({
+      unit_type: 'truck', service_type: 'one_year'
+    }).first().interval;
+
+    const lastDone = moment(unit.one_year_date, DB_DATE_FORMAT);
+    return lastDone.add(oneYearInt, 'days');
+  }
+
   dateInRangePred = ({ date }) => {
     if (date && date.isValid()) {
       return date.isBefore(moment().add(this.state.range, 'months'));
@@ -126,7 +138,8 @@ class Calibrations extends Component {
               <thead>
                 <tr>
                   <th>Unit</th>
-                  <th>Date</th>
+                  <th>Calibration Due</th>
+                  <th>B620 Due</th>
                   <th>Type</th>
                 </tr>
               </thead>
@@ -143,8 +156,10 @@ class Calibrations extends Component {
                         )
                       }
                     </td>
+                    <td>{this.getB620Due(t.id).format('ll')}</td>
                     <td>{t.type}</td>
-                  </tr>)}
+                  </tr>)
+                }
               </tbody>
             </Table>
           </Col>
