@@ -1,5 +1,7 @@
 import React, { PropTypes, Component } from 'react';
-import { Grid, Col, Row, Table, Button, ButtonGroup, ListGroup, ListGroupItem } from 'react-bootstrap';
+import {
+  Grid, Col, Row, Table, Checkbox, Button, ButtonGroup, ListGroup, ListGroupItem
+} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
@@ -41,7 +43,8 @@ class Calibrations extends Component {
     dispatch(requestUnits('truck'));
 
     this.state = {
-      range: 3
+      range: 3,
+      includePropane: false
     };
   }
 
@@ -98,6 +101,15 @@ class Calibrations extends Component {
     return false;
   }
 
+  includePropanePred = ({ type }) => {
+    if (this.state.includePropane) {
+      return true; // Includes everything essentially.
+    }
+    return !(type === 'Propane');
+  }
+
+  unitFilter = unit => this.includePropanePred(unit) && this.dateInRangePred(unit);
+
   createMonthSelectBtn = n => (
     <Button
       key={`mBtn${n}`}
@@ -115,7 +127,7 @@ class Calibrations extends Component {
 
     const sortedByCal = trucks()
       .map(this.getFirstCalDue)
-      .filter(this.dateInRangePred)
+      .filter(this.unitFilter)
       .sort(dateCompNearestFirst);
 
     const trucksMissingCal = trucks({
@@ -130,6 +142,12 @@ class Calibrations extends Component {
             <ButtonGroup>
               {[3, 6, 12].map(this.createMonthSelectBtn)}
             </ButtonGroup>
+            <Checkbox
+              checked={this.state.includePropane}
+              onClick={() => this.setState({ includePropane: !this.state.includePropane })}
+            >
+              Include Propane
+            </Checkbox>
           </Col>
         </Row>
         <Row>
