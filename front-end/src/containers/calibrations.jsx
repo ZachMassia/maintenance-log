@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Grid, Col, Row, Table, Button, ButtonGroup } from 'react-bootstrap';
+import { Grid, Col, Row, Table, Button, ButtonGroup, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import Moment from 'moment';
@@ -82,10 +82,7 @@ class Calibrations extends Component {
     if (date && date.isValid()) {
       return date.isBefore(moment().add(this.state.range, 'months'));
     }
-
-    // TODO: Create dedicated table for units missing a calibration date.
-    //       For now keep them listed here.
-    return true;
+    return false;
   }
 
   createMonthSelectBtn = n => (
@@ -100,10 +97,15 @@ class Calibrations extends Component {
 
   render() {
     const { trucks } = this.props;
+
     const sortedByCal = trucks()
       .map(this.getFirstCalDue)
       .filter(this.dateInRangePred)
       .sort(dateCompNearestFirst);
+
+    const trucksMissingCal = trucks({
+      oil_cal_date: null, gas_cal_date: null, propane_cal_date: null
+    });
 
     return (
       <Grid>
@@ -142,6 +144,16 @@ class Calibrations extends Component {
                   </tr>)}
               </tbody>
             </Table>
+          </Col>
+        </Row>
+        <Row>
+          <Col><h2>Trucks Missing Calibration Data</h2></Col>
+        </Row>
+        <Row>
+          <Col>
+            <ListGroup>
+              {trucksMissingCal.map(t => <ListGroupItem key={t.id}>{t.unit_num}</ListGroupItem>)}
+            </ListGroup>
           </Col>
         </Row>
       </Grid>
