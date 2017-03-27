@@ -1,2 +1,3 @@
 export NavHeader from './navheader';
-export MonthChart from './monthchart';
+
+export * from './vis';
