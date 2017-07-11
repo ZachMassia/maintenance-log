@@ -66,7 +66,8 @@ class Truck:
 ignored_rows = ['1 Maxville', '2 Chesterville', '6 Bourget', '9 Cornwall',
                     '10 Lube', '4 Athens', '7 Kempville', '8 Pembroke', 'Picton',
                     'DEF Div', 'Pick Ups', 'air comp.', 'T42', 'T-40', 1054, 1056,
-                    1066, 1062, 1067, 1068, 1069, 1074, 43, 1078, 'Timmins' ]
+                    1066, 1062, 1067, 1068, 1069, 1074, 43, 1078, 'Timmins', 'Stratford',
+                    1049, 1075, 1080 ]
 
 
 
@@ -95,7 +96,7 @@ def filter_invalid_data(units):
                 # Tractor and Truck unit numbers come through as ints, but they are stored as
                 # Unicode in the db.
                 # Remove any extras such as '- Propane' from the end of the string.
-                x[column_name] = str(value).split(' - ')[0]
+                x[column_name] = str(value).split()[0]
             elif type(value) is not datetime:
                 # At this point, if it's not a datetime object, it's most likely a cell in one of
                 # the date columns which is blank, or has "N/A", so pass it through as None.
